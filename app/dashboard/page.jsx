@@ -1,10 +1,7 @@
 import {redirect} from "next/navigation";
 import {createClient} from "@/utils/supabase/server";
 
-import LoginPage from "@/app/login/page";
-import DashboardPage from "@/app/dashboard/page";
-
-const HomePage = async () => {
+const DashboardPage = async () => {
 	const supabase = await createClient();
 
 	const {data, error} = await supabase.auth.getUser();
@@ -13,7 +10,11 @@ const HomePage = async () => {
 		redirect("/login");
 	}
 
-	redirect("/dashboard");
-};
+	return (
 
-export default HomePage;
+		<section>Dashboard</section>
+
+	)
+}
+
+export default DashboardPage;
