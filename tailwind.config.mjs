@@ -7,6 +7,9 @@ export default {
 	],
 	theme: {
 		extend: {
+			height: {
+				"screen-dynamic": "100svh"
+			},
 			colors: {
 				primary: {
 					50: '#eef2ff',
