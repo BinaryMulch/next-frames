@@ -2,7 +2,9 @@
 
 import {FaTrashAlt, FaArrowUp, FaArrowDown, FaEye} from "react-icons/fa";
 
-const ImageCard = () => {
+const ImageCard = ({image}) => {
+
+	console.log(image.name)
 
 	const previewClick = () => {
 		console.log("shift up click");
@@ -23,7 +25,7 @@ const ImageCard = () => {
 	return (
 
 			<div className="flex items-center p-4 bg-white rounded-lg shadow">
-				<p className="flex flex-grow font-normal text-gray-700">Image name here.png</p>
+				<p className="flex flex-grow font-medium text-gray-700">{image.name}</p>
 				<button onClick={previewClick} className="mx-1 p-2 bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700">
 					<FaEye />
 				</button>

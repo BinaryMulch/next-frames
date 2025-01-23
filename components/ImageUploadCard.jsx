@@ -1,6 +1,8 @@
 "use client";
 
 import {FaCloudUploadAlt} from "react-icons/fa";
+import {redirect} from "next/navigation";
+
 import {uploadImage} from "@/app/actions/uploadImage";
 
 const ImageUpload = () => {
@@ -18,7 +20,12 @@ const ImageUpload = () => {
 	const onImageUpload = (event) => {
 		event.preventDefault();
 		//console.log(event.target.files)
-		uploadImage(event.target.files);
+		
+		const success = uploadImage(event.target.files);
+		if (success) {
+			//redirect("/dashboard");
+			//onImageUploadSuccess(true);
+		}
 	}
 
 	return (

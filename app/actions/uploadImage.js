@@ -6,19 +6,22 @@ export async function uploadImage(files) {
 	const supabase = await createClient();
 
 	// validate user session
-	if (!validateUserSession(supabase)) return;
+	if (!validateUserSession(supabase)) return false;
 
 	// generate storage id
 	const storageId = crypto.randomUUID();
 
 	// upload image to storage
-	if (!uploadImageToStorage(supabase, storageId, files[0])) return;
+	if (!uploadImageToStorage(supabase, storageId, files[0])) return false;
 
 	// get public url to image
 	const publicUrl = getPublicUrl(supabase, storageId);
 
 	// add image to database
-	if (!insertImageToDatabase(supabase, files[0], publicUrl, storageId)) return;
+	if (!insertImageToDatabase(supabase, files[0], publicUrl, storageId)) return false;
+
+	// successfully uploaded image
+	return true;
 
 }
 

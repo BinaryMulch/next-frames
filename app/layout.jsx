@@ -4,7 +4,7 @@ const RootLayout = ({children}) => {
 	return (
 
 		<html>
-			<body className="bg-gray-50">
+			<body className="bg-primary-100">
 				<main>{children}</main>
 			</body>
 		</html>
