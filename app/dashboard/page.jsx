@@ -1,13 +1,10 @@
 import {redirect} from "next/navigation";
-import Image from "next/image";
 import {createClient} from "@/utils/supabase/server";
 
 import {ImagesProvider} from "../context/imagesContext";
 import ImageUploadCard from "@/components/ImageUploadCard";
 import ImageCardList from "@/components/imageCardList";
-import ImageCard from "@/components/imageCard";
 import ImagePreview from "@/components/imagePreview";
-import getAllImages from "../actions/getAllImages";
 
 const DashboardPage = async () => {
 	const supabase = await createClient();
