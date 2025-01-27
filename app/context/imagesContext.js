@@ -2,6 +2,8 @@
 
 import {createContext, useContext, useState} from "react";
 
+import getAllImages from "@/app/actions/getAllImages";
+
 export const ImagesContext = createContext();
 
 export const ImagesProvider = ({children}) => {
@@ -9,14 +11,18 @@ export const ImagesProvider = ({children}) => {
 	const [images, setImages] = useState([]);
 	const [imagePreviewUrl, setImagePreviewUrl] = useState("");
 	
+	const handleImageUpdate = async () => {
+		const data = await getAllImages();
+		setImages(data);
+	}
+
 	const handleImagePreview = (url) => {
-		setImagePreviewUrl("");
 		setImagePreviewUrl(url);
 	}
 
 	return (
 
-		<ImagesContext.Provider value={{imagePreviewUrl, handleImagePreview}}>
+		<ImagesContext.Provider value={{images, handleImageUpdate, imagePreviewUrl, handleImagePreview}}>
 			{children}
 		</ImagesContext.Provider>
 

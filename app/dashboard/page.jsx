@@ -7,7 +7,7 @@ import ImageUploadCard from "@/components/ImageUploadCard";
 import ImageCardList from "@/components/imageCardList";
 import ImageCard from "@/components/imageCard";
 import ImagePreview from "@/components/imagePreview";
-import {getAllImages} from "../actions/getAllImages";
+import getAllImages from "../actions/getAllImages";
 
 const DashboardPage = async () => {
 	const supabase = await createClient();
@@ -15,15 +15,6 @@ const DashboardPage = async () => {
 	// validate user session
 	const {data: authData, error: authError} = await supabase.auth.getUser();
 	if (authError || !authData.user) redirect("/login");
-
-	// get images from database
-	//const images = await getAllImages();
-	const images = [];
-
-	const handleImageUploadSuccess = async (response) => {
-		//const images = await getAllImages();
-
-	}
 
 	return (
 
@@ -33,7 +24,7 @@ const DashboardPage = async () => {
 
 					<div className="md:col-span-1 bg-gray-50 shadow-lg rounded-lg">
 						<ImageUploadCard />
-						<ImageCardList images={images} />
+						<ImageCardList />
 					</div>
 
 					<div className="relative xl:col-span-2 bg-gray-50 shadow-lg rounded-lg">

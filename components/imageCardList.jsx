@@ -1,26 +1,29 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 
+import {ImagesContext} from "@/app/context/imagesContext";
 import ImageCard from "@/components/imageCard";
-import { getAllImages } from "@/app/actions/getAllImages";
 
 const imageCardList = () => {
-	const [images, setImages] = useState([]);
-	const [loading, setLoading] = useState(true);
+	const {images, handleImageUpdate} = useContext(ImagesContext);
 
-	useEffect(() => {
-		async function fetchImages () {
-			const data = await getAllImages();
-			setImages(data);
-			setLoading(false);
-		}
-		fetchImages();
-	}, [])
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(
+		() => {
+			async function fetchImages() {
+				await handleImageUpdate();
+				setIsLoading(false);
+			}
+			fetchImages();
+		},
+		[]
+	)
 
 	return (
 
-		!loading
+		!isLoading
 		? (
 			<div className="flex flex-col gap-2 p-4">
 				{

@@ -2,7 +2,7 @@
 
 import {createClient} from "@/utils/supabase/server";
 
-export async function getAllImages() {
+async function getAllImages() {
 
 	const supabase = await createClient();
 
@@ -22,3 +22,5 @@ export async function getAllImages() {
 	return data	
 
 }
+
+export default getAllImages;

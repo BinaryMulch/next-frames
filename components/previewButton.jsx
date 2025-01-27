@@ -6,8 +6,6 @@ import {FaEye} from "react-icons/fa";
 import {ImagesContext} from "@/app/context/imagesContext";
 
 const PreviewButton = ({url}) => {
-	//const [loading, setLoading] = useState(false);
-
 	const {handleImagePreview} = useContext(ImagesContext);
 
 	return (
