@@ -23,8 +23,11 @@ const ImageUpload = () => {
 		const files = event.dataTransfer.files;
 
 		const MAX_FILE_SIZE = 5 * 1024 * 1024;
+		const MAX_TOTAL_SIZE = 50 * 1024 * 1024;
+		let totalSize = 0;
 		for (let i = 0; i < files.length; i ++) {
-			if (files[i].size > MAX_FILE_SIZE) {
+			totalSize += files[i].size
+			if (files[i].size > MAX_FILE_SIZE || totalSize > MAX_TOTAL_SIZE) {
 				toast.error("Max file size exceeded!");
 				return false;
 			}

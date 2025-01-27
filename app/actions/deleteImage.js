@@ -1,6 +1,7 @@
 "use server";
 
 import {createClient} from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export default async function deleteImage(id, storageId) {
 
@@ -23,6 +24,7 @@ export default async function deleteImage(id, storageId) {
 	if (!databaseSuccess) return false;
 
 	// successfully delete image
+	revalidatePath("/slideshow");
 	return true;
 
 }
