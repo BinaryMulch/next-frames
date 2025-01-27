@@ -2,6 +2,7 @@
 
 import {useContext, useState} from "react";
 import {FaCloudUploadAlt} from "react-icons/fa";
+import {toast} from "react-toastify";
 
 import {uploadImage} from "@/app/actions/uploadImage";
 import {ImagesContext} from "@/app/context/imagesContext";
@@ -23,6 +24,7 @@ const ImageUpload = () => {
 		const MAX_FILE_SIZE = 5 * 1024 * 1024;
 		for (let i = 0; i < files.length; i ++) {
 			if (files[i].size > MAX_FILE_SIZE) {
+				toast.error("Max file size exceeded!");
 				return false;
 			}
 		}
@@ -31,6 +33,7 @@ const ImageUpload = () => {
 		const success = await uploadImage(files);
 		handleImageUpdate();
 		setIsLoading(false)
+		toast.success("File uploaded!");
 	}
 
 	const onImageUpload = async (event) => {
@@ -41,6 +44,7 @@ const ImageUpload = () => {
 		const MAX_FILE_SIZE = 5 * 1024 * 1024;
 		for (let i = 0; i < files.length; i ++) {
 			if (files[i].size > MAX_FILE_SIZE) {
+				toast.error("Max file size exceeded!");
 				return false;
 			}
 		}
@@ -49,6 +53,7 @@ const ImageUpload = () => {
 		const success = await uploadImage(files);
 		handleImageUpdate();
 		setIsLoading(false)
+		toast.success("File uploaded!");
 	}
 
 	return (

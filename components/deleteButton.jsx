@@ -2,6 +2,7 @@
 
 import {useContext, useState} from "react";
 import {FaTrashAlt} from "react-icons/fa";
+import {toast} from "react-toastify";
 
 import deleteImage from "@/app/actions/deleteImage";
 import {ImagesContext} from "@/app/context/imagesContext";
@@ -13,8 +14,13 @@ const DeleteButton = ({id, storageId}) => {
 
 	const handleDeleteClick = async () => {
 		setIsLoading(true);
-		await deleteImage(id, storageId);
+		const success = await deleteImage(id, storageId);
+		if (!success) {
+			toast.error("File could not be deleted!");
+			return;
+		}
 		handleImageUpdate();
+		toast.success("File deleted!");
 	}
 
 	return (
