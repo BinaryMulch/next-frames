@@ -18,13 +18,15 @@ export async function uploadImage(files) {
 		const storageId = crypto.randomUUID();
 
 		// upload image to storage
-		if (!uploadImageToStorage(supabase, storageId, file)) return false;
+		const storageSuccess = await uploadImageToStorage(supabase, storageId, file);
+		if (!storageSuccess) return false;
 
 		// get public url to image
-		const publicUrl = getPublicUrl(supabase, storageId);
+		const publicUrl = await getPublicUrl(supabase, storageId);
 
 		// add image to database
-		if (!insertImageToDatabase(supabase, file, publicUrl, storageId)) {
+		const databaseSuccess = await insertImageToDatabase(supabase, file, publicUrl, storageId);
+		if (!databaseSuccess) {
 			deleteFromStorage(supabase, file.storageId);
 			return false;
 		}

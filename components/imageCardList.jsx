@@ -25,7 +25,7 @@ const imageCardList = () => {
 
 		!isLoading
 		? (
-			<div className="flex flex-col gap-2 p-4">
+			<div className="flex flex-col gap-2 p-4 max-h-[72vh] overflow-y-auto">
 				{
 					images.map(
 						(image) => (

@@ -17,32 +17,10 @@ export default async function deleteImage(id, storageId) {
 	// delete image from storage
 	const storageSuccess = await deleteFromStorage(supabase, storageId);
 	if (!storageSuccess) return false;
-	/*
-	const {error: storageError} = await supabase
-		.storage
-		.from("images")
-		.remove([storageId]);
-	
-	if (storageError) {
-		console.error("Storage Error: ", storageError);
-		return false;
-	}
-	*/
 
 	// delete image from database
 	const databaseSuccess = await deleteFromDatabase(supabase, id);
 	if (!databaseSuccess) return false;
-	/*
-	const {error: databaseError} = await supabase
-		.from("images")
-		.delete()
-		.eq("id", id);
-	
-	if (databaseError) {
-		console.error("Database Error: ", databaseError);
-		return false;
-	}
-	*/
 
 	// successfully delete image
 	return true;
