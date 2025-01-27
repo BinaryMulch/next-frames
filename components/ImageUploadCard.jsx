@@ -18,17 +18,35 @@ const ImageUpload = () => {
 	const handleDrop = async (event) => {
 		event.preventDefault();
 
+		const files = event.dataTransfer.files;
+
+		const MAX_FILE_SIZE = 5 * 1024 * 1024;
+		for (let i = 0; i < files.length; i ++) {
+			if (files[i].size > MAX_FILE_SIZE) {
+				return false;
+			}
+		}
+
 		setIsLoading(true);
-		const success = await uploadImage(event.dataTransfer.files);
+		const success = await uploadImage(files);
 		handleImageUpdate();
 		setIsLoading(false)
 	}
 
 	const onImageUpload = async (event) => {
 		event.preventDefault();
+
+		const files = event.target.files;
+
+		const MAX_FILE_SIZE = 5 * 1024 * 1024;
+		for (let i = 0; i < files.length; i ++) {
+			if (files[i].size > MAX_FILE_SIZE) {
+				return false;
+			}
+		}
 		
 		setIsLoading(true);
-		const success = await uploadImage(event.target.files);
+		const success = await uploadImage(files);
 		handleImageUpdate();
 		setIsLoading(false)
 	}
