@@ -19,7 +19,8 @@ const ImageUpload = () => {
 		event.preventDefault();
 
 		setIsLoading(true);
-		await uploadImage(event.dataTransfer.files);
+		const success = await uploadImage(event.dataTransfer.files);
+		if (!success) return;
 		handleImageUpdate();
 		setIsLoading(false)
 	}
@@ -28,7 +29,8 @@ const ImageUpload = () => {
 		event.preventDefault();
 		
 		setIsLoading(true);
-		await uploadImage(event.target.files);
+		const success = await uploadImage(event.target.files);
+		if (!success) return;
 		handleImageUpdate();
 		setIsLoading(false)
 	}

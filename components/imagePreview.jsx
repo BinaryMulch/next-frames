@@ -6,7 +6,7 @@ import Image from "next/image";
 import {ImagesContext} from "@/app/context/imagesContext";
 
 const PreviewImage = () => {
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [previousUrl, setPreviousUrl] = useState("");
 
 	const {imagePreviewUrl} = useContext(ImagesContext);
@@ -40,7 +40,7 @@ const PreviewImage = () => {
 				)
 			}
 
-			<p className="flex justify-center items-center h-full text-lg text-gray-700">Image Preview</p>
+			<p style={{visibility: isLoading || imagePreviewUrl ? "hidden" : "visible"}} className="flex justify-center items-center h-full text-lg text-gray-700">Image Preview</p>
 			<Image
 				className="object-contain"
 				src={imagePreviewUrl ? imagePreviewUrl : "/placeholder_1920x1080.png"}
@@ -50,6 +50,7 @@ const PreviewImage = () => {
 				onError={handleLoad}
 				style={{visibility: isLoading || !imagePreviewUrl ? "hidden" : "visible"}}
 			/>
+			
 		</>
 
 	);
