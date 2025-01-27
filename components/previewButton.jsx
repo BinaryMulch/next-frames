@@ -16,7 +16,7 @@ const PreviewButton = ({url}) => {
 			<FaEye />
 		</button>
 
-	)
-}
+	);
+};
 
 export default PreviewButton;

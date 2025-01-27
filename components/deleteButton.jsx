@@ -35,7 +35,7 @@ const DeleteButton = ({id, storageId}) => {
 			
 		</button>
 
-	)
-}
+	);
+};
 
 export default DeleteButton;

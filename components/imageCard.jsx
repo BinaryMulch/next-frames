@@ -1,8 +1,8 @@
 "use client";
 
-import {FaArrowUp, FaArrowDown} from "react-icons/fa";
-
 import PreviewButton from "./previewButton";
+import MoveUpButton from "./moveUpButton";
+import MoveDownButton from "./moveDownButton";
 import DeleteButton from "./deleteButton";
 
 const ImageCard = ({image}) => {
@@ -13,12 +13,8 @@ const ImageCard = ({image}) => {
 				<p className="flex flex-grow text-gray-700">{image.name}</p>
 				<div className="pt-2">
 					<PreviewButton url={image.url} />
-					<button className="mx-1 p-2 bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700">
-						<FaArrowUp />
-					</button>
-					<button className="mx-1 p-2 bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700">
-						<FaArrowDown />
-					</button>
+					<MoveUpButton image={image} />
+					<MoveDownButton image={image} />
 					<DeleteButton id={image.id} storageId={image.storage_id} />
 				</div>
 

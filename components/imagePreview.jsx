@@ -52,7 +52,7 @@ const PreviewImage = () => {
 			/>
 		</>
 
-	)
-}
+	);
+};
 
 export default PreviewImage;

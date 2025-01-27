@@ -17,7 +17,13 @@ async function getAllImages() {
 	// get all images
 	const {data} = await supabase
 		.from("images")
-		.select()
+		.select();
+
+	
+	// sort images by order position
+	data.sort(
+		(a, b) => (a.order_position - b.order_position)
+	)
 
 	return data	
 
