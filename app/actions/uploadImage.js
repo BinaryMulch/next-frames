@@ -8,19 +8,25 @@ export async function uploadImage(files) {
 	// validate user session
 	if (!validateUserSession(supabase)) return false;
 
-	// generate storage id
-	const storageId = crypto.randomUUID();
+	// upload images
+	for (let i = 0; i < files.length; i ++) {
+		const file = files[i];
 
-	// upload image to storage
-	if (!uploadImageToStorage(supabase, storageId, files[0])) return false;
+		// generate storage id
+		const storageId = crypto.randomUUID();
 
-	// get public url to image
-	const publicUrl = getPublicUrl(supabase, storageId);
+		// upload image to storage
+		if (!uploadImageToStorage(supabase, storageId, file)) return false;
 
-	// add image to database
-	if (!insertImageToDatabase(supabase, files[0], publicUrl, storageId)) return false;
+		// get public url to image
+		const publicUrl = getPublicUrl(supabase, storageId);
 
-	// successfully uploaded image
+		// add image to database
+		if (!insertImageToDatabase(supabase, file, publicUrl, storageId)) return false;
+
+	};
+
+	// successfully uploaded images
 	return true;
 
 }
