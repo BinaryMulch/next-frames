@@ -25,7 +25,7 @@ const Carousel = ({images}) => {
 
 	return (
 
-		<div className="h-screen w-screen flex items-center justify-center overflow-hidden relative bg-black">
+		<div className="cursor-none h-screen w-screen flex items-center justify-center overflow-hidden relative bg-black">
 			<div className="flex transition-transform duration-700" style={{ transform: `translateX(-${currentIndex * 100}%)`}}>
 				{
 					images.map(
