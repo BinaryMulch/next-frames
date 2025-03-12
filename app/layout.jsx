@@ -1,13 +1,18 @@
 import "./globals.css";
 
-const RootLayout = ({children}) => {
+export const metadata = {
+	title: "Next Frames"
+}
+
+const RootLayout = ({ children }) => {
 	return (
 
-		<html>
-			<body className="bg-primary-100">
-				<main>{children}</main>
+		<html className="h-full bg-gray-900">
+			<body className="h-full">
+				<main className="h-full">{children}</main>
 			</body>
 		</html>
+		
 
 	);
 };
