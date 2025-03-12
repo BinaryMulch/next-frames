@@ -16,7 +16,8 @@ async function moveUpImage(image) {
 	}
 
 	// check if out of range
-	if (image.order_position == 1) return false;
+	const images = await getAllImages();
+	if (image.order_position == images[0].order_position) return false;
 
 	// get below image
 	const {data, error: getBelowError} = await supabase

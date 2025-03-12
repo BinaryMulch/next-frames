@@ -1,6 +1,8 @@
 "use server";
 
 import {createClient} from "@/utils/supabase/server";
+import getAllImages from "./getAllImages";
+import { deleteFromStorage } from "./deleteImage";
 
 export async function uploadImage(files) {
 	const supabase = await createClient();
@@ -16,13 +18,18 @@ export async function uploadImage(files) {
 		const storageId = crypto.randomUUID();
 
 		// upload image to storage
-		if (!uploadImageToStorage(supabase, storageId, file)) return false;
+		const storageSuccess = await uploadImageToStorage(supabase, storageId, file);
+		if (!storageSuccess) return false;
 
 		// get public url to image
-		const publicUrl = getPublicUrl(supabase, storageId);
+		const publicUrl = await getPublicUrl(supabase, storageId);
 
 		// add image to database
-		if (!insertImageToDatabase(supabase, file, publicUrl, storageId)) return false;
+		const databaseSuccess = await insertImageToDatabase(supabase, file, publicUrl, storageId);
+		if (!databaseSuccess) {
+			deleteFromStorage(supabase, file.storageId);
+			return false;
+		}
 
 	};
 
@@ -66,15 +73,15 @@ function getPublicUrl(supabase, storageId) {
 }
 
 async function insertImageToDatabase(supabase, file, publicUrl, storageId) {
-	const {count} = await supabase
-		.from("images")
-		.select("*", {count: "exact", head: true});
+	const images = await getAllImages();
+	let next_position = 1
+	if (images.length > 0) next_position = images[images.length - 1].order_position + 1
 
 	const image = {
 		name: file.name,
 		url: publicUrl,
 		storage_id: storageId,
-		order_position: count + 1
+		order_position: next_position
 	}
 
 	const {error} = await supabase
