@@ -10,7 +10,7 @@ export const metadata = {
 const RootLayout = ({children}) => {
 	return (
 
-		<html className="h-full bg-gray-900">
+		<html className="h-full">
 			<body className="h-full">
 				<main className="h-full">{children}</main>
 				<ToastContainer />

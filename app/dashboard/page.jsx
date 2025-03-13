@@ -1,6 +1,7 @@
 import {redirect} from "next/navigation";
 import {createClient} from "@/utils/supabase/server";
 
+import Navbar from "@/components/navbar";
 import {ImagesProvider} from "../context/imagesContext";
 import ImageUploadCard from "@/components/ImageUploadCard";
 import ImageCardList from "@/components/imageCardList";
@@ -15,6 +16,8 @@ const DashboardPage = async () => {
 
 	return (
 
+		<>
+		<Navbar />
 		<ImagesProvider>
 			<section className="">
 				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 p-4 h-screen-dynamic">
@@ -33,6 +36,8 @@ const DashboardPage = async () => {
 				</div>
 			</section>
 		</ImagesProvider>
+		</>
+		
 
 	)
 }
