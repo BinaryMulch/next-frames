@@ -23,18 +23,33 @@ const Carousel = ({images}) => {
 		[images.length]
 	);
 
+	useEffect(
+		() => {
+			if (images.length == 0) {
+				setCurrentIndex(0);
+				return;
+			}
+
+			if (currentIndex >= images.length) {
+				setCurrentIndex(0);
+			}
+		}, [images.length, currentIndex]
+	);
+
 	return (
 
-		<div className="cursor-none h-screen w-screen flex items-center justify-center overflow-hidden relative bg-black">
-			<div className="flex transition-transform duration-700" style={{ transform: `translateX(-${currentIndex * 100}%)`}}>
+		<div className="cursor-none h-screen w-screen overflow-hidden relative bg-black">
+			<div className="flex h-full transition-transform duration-700" style={{ transform: `translateX(-${currentIndex * 100}vw)`}}>
 				{
 					images.map(
 						(image, index) => (
-							<img
-								key={index}
-								src={image}
-								className="w-screen h-screen object-contain flex-shrink-0"
-							/>
+							<div key={index} className="w-screen h-screen flex-shrink-0">
+								<img
+									key={index}
+									src={image}
+									className="w-screen h-screen object-contain flex-shrink-0"
+								/>
+							</div>
 						)
 					)
 				}

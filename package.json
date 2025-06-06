@@ -1,6 +1,6 @@
 {
   "name": "next-frames",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,7 +13,8 @@
     "@heroicons/react": "^2.2.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.48.0",
-    "next": "15.1.5",
+    "next": "15.3.3",
+    "nodejs": "^0.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
