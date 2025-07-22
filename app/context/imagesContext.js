@@ -1,6 +1,6 @@
 "use client";
 
-import {createContext, useContext, useState, useRef, useEffect} from "react";
+import {createContext, useContext, useState, useRef, useEffect, useMemo, useCallback} from "react";
 import {createClient} from "@/utils/supabase/client";
 
 import getAllImages from "@/app/actions/getAllImages";
@@ -21,7 +21,7 @@ export const ImagesProvider = ({children}) => {
 	const HEARTBEAT_INTERVAL = 5000; // 5 seconds
 	const ACTIVE_USER_TIMEOUT = 15000; // 15 seconds
 	
-	const handleImageUpdate = async () => {
+	const handleImageUpdate = useCallback(async () => {
 		try {
 			const data = await getAllImages();
 			setImages(data || []);
@@ -29,11 +29,11 @@ export const ImagesProvider = ({children}) => {
 			console.error("Error updating images: ", error);
 			setImages([]);
 		}
-	}
+	}, []);
 
-	const handleImagePreview = (url) => {
+	const handleImagePreview = useCallback((url) => {
 		setImagePreviewUrl(url);
-	}
+	}, []);
 
 	// Initialize current user and set up heartbeat
 	useEffect(() => {
@@ -47,8 +47,8 @@ export const ImagesProvider = ({children}) => {
 				setCurrentUser(user.id);
 				startHeartbeat(user.id);
 				
-				// Periodically check for active user changes
-				checkInterval = setInterval(checkForActiveUser, 2000);
+				// Periodically check for active user changes (reduced frequency)
+				checkInterval = setInterval(checkForActiveUser, 10000);
 			}
 		};
 		
@@ -80,9 +80,7 @@ export const ImagesProvider = ({children}) => {
 		updateActiveUser(userId);
 	};
 
-	const updateActiveUser = (userId) => {
-		// In a real implementation, this would be stored in localStorage or a shared state
-		// For simplicity, using localStorage with timestamp
+	const updateActiveUser = useCallback((userId) => {
 		const now = Date.now();
 		const activeUserData = {
 			userId,
@@ -90,9 +88,9 @@ export const ImagesProvider = ({children}) => {
 		};
 		localStorage.setItem('activeUser', JSON.stringify(activeUserData));
 		checkForActiveUser();
-	};
+	}, []);
 
-	const checkForActiveUser = () => {
+	const checkForActiveUser = useCallback(() => {
 		const stored = localStorage.getItem('activeUser');
 		if (!stored) {
 			setActiveUser(null);
@@ -116,14 +114,14 @@ export const ImagesProvider = ({children}) => {
 		
 		// Only block if it's a DIFFERENT user who is active
 		setIsBlocked(currentUser && userId !== currentUser);
-	};
+	}, [currentUser]);
 
-	const claimActiveStatus = () => {
+	const claimActiveStatus = useCallback(() => {
 		if (currentUser) {
 			updateActiveUser(currentUser);
 			startHeartbeat(currentUser);
 		}
-	};
+	}, [currentUser, updateActiveUser]);
 
 	const processOperationQueue = async () => {
 		if (isProcessingQueue.current || operationQueue.current.length === 0) {
@@ -191,21 +189,23 @@ export const ImagesProvider = ({children}) => {
 		processOperationQueue();
 	};
 
+	const contextValue = useMemo(() => ({
+		images, 
+		handleImageUpdate, 
+		imagePreviewUrl, 
+		handleImagePreview, 
+		isReordering, 
+		setIsReordering,
+		queueMoveOperation,
+		isBlocked,
+		activeUser,
+		currentUser,
+		claimActiveStatus
+	}), [images, handleImageUpdate, imagePreviewUrl, handleImagePreview, isReordering, isBlocked, activeUser, currentUser, claimActiveStatus]);
+
 	return (
 
-		<ImagesContext.Provider value={{
-			images, 
-			handleImageUpdate, 
-			imagePreviewUrl, 
-			handleImagePreview, 
-			isReordering, 
-			setIsReordering,
-			queueMoveOperation,
-			isBlocked,
-			activeUser,
-			currentUser,
-			claimActiveStatus
-		}}>
+		<ImagesContext.Provider value={contextValue}>
 			{children}
 		</ImagesContext.Provider>
 

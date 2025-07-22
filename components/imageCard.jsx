@@ -1,11 +1,12 @@
 "use client";
 
+import {memo} from "react";
 import PreviewButton from "./previewButton";
 import MoveUpButton from "./moveUpButton";
 import MoveDownButton from "./moveDownButton";
 import DeleteButton from "./deleteButton";
 
-const ImageCard = ({image}) => {
+const ImageCard = memo(({image}) => {
 
 	return (
 
@@ -28,6 +29,8 @@ const ImageCard = ({image}) => {
 			</div>
 
 	);
-};
+});
+
+ImageCard.displayName = 'ImageCard';
 
 export default ImageCard;

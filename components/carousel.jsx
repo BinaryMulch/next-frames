@@ -1,6 +1,7 @@
 "use client";
 
 import {useState, useEffect} from "react";
+import Image from "next/image";
 
 const Carousel = ({images}) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -47,12 +48,14 @@ const Carousel = ({images}) => {
 					{
 						images.map(
 							(image, index) => (
-								<div key={index} className="w-screen h-screen flex-shrink-0">
-									<img
-										key={index}
+								<div key={index} className="w-screen h-screen flex-shrink-0 relative">
+									<Image
 										src={image}
-										className="w-screen h-screen object-contain flex-shrink-0"
+										fill
+										className="object-contain"
 										alt={`Slide ${index + 1}`}
+										priority={index === currentIndex}
+										sizes="100vw"
 									/>
 								</div>
 							)

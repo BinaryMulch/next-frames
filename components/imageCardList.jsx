@@ -1,12 +1,12 @@
 "use client";
 
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState, memo} from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
 import {ImagesContext} from "@/app/context/imagesContext";
 import ImageCard from "@/components/imageCard";
 
-const imageCardList = () => {
+const ImageCardList = memo(() => {
 	const {images, handleImageUpdate} = useContext(ImagesContext);
 
 	const [isLoading, setIsLoading] = useState(true);
@@ -69,6 +69,8 @@ const imageCardList = () => {
 		</div>
 
 	);
-};
+});
 
-export default imageCardList;
+ImageCardList.displayName = 'ImageCardList';
+
+export default ImageCardList;
