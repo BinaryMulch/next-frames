@@ -33,8 +33,8 @@ const DeleteButton = ({id, storageId}) => {
 			disabled={isReordering || isLoading}
 			className={`p-2 rounded-lg transition-colors ${
 				isReordering || isLoading 
-					? 'text-gray-400 cursor-not-allowed' 
-					: 'text-red-600 hover:text-red-700 hover:bg-red-50'
+					? 'text-gray-400 dark:text-gray-600 cursor-not-allowed' 
+					: 'text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/30'
 			}`}
 			title="Delete image"
 		>

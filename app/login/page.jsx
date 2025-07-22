@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { login } from "@/app/actions/login";
+import ThemeToggle from "@/components/themeToggle";
 
 export default function LoginPage() {
 
@@ -26,26 +27,28 @@ export default function LoginPage() {
 
 	return (
 
-		<>
-			<div className="bg-gray-50 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+		<div className="bg-gray-50 dark:bg-gray-900 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 transition-colors duration-200">
 				<div className="sm:mx-auto sm:w-full sm:max-w-md">
-					<div className="bg-white p-8 shadow-lg rounded-lg border border-gray-200">
+					<div className="relative bg-white dark:bg-gray-800 p-8 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+						<div className="absolute top-4 right-4">
+							<ThemeToggle />
+						</div>
 						<div className="text-center mb-8">
-							<h1 className="text-3xl font-bold text-gray-900">Next Frames</h1>
-							<p className="mt-2 text-sm text-gray-600">Sign in to your account</p>
+							<h1 className="text-3xl font-bold text-gray-900 dark:text-white">Next Frames</h1>
+							<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Sign in to your account</p>
 						</div>
 
 						{error &&
 							(
-								<div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-									<p className="text-sm text-red-600 text-center">{error}</p>
+								<div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+									<p className="text-sm text-red-600 dark:text-red-400 text-center">{error}</p>
 								</div>
 							)
 						}
 
 						<form onSubmit={handleSubmit} className="space-y-6">
 							<div>
-								<label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-2">
+								<label htmlFor="email" className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
 									Email address
 								</label>
 								<input
@@ -54,13 +57,13 @@ export default function LoginPage() {
 									type="email"
 									required
 									autoComplete="email"
-									className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 focus:outline-none transition-colors"
+									className="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 focus:outline-none transition-colors"
 									placeholder="Enter your email"
 								/>
 							</div>
 
 							<div>
-								<label htmlFor="password" className="block text-sm font-semibold text-gray-900 mb-2">
+								<label htmlFor="password" className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
 									Password
 								</label>
 								<input
@@ -69,7 +72,7 @@ export default function LoginPage() {
 									type="password"
 									required
 									autoComplete="current-password"
-									className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 focus:outline-none transition-colors"
+									className="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 focus:outline-none transition-colors"
 									placeholder="Enter your password"
 								/>
 							</div>
@@ -101,8 +104,7 @@ export default function LoginPage() {
 						</form>
 					</div>
 				</div>
-			</div>
-		</>
+		</div>
 
 	)
 

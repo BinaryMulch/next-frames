@@ -88,9 +88,9 @@ const ImageUpload = () => {
 
 	return (
 
-		<div className="p-4 border-b border-gray-200">
+		<div className="p-4 border-b border-gray-200 dark:border-gray-700">
 			<div onDragOver={handleDragOver} onDrop={handleDrop} className="flex items-center justify-center w-full">
-				<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-white hover:bg-blue-50 hover:border-blue-400 transition-colors duration-200">
+				<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-white dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 hover:border-blue-400 transition-colors duration-200">
 					<div className="flex flex-col items-center justify-center py-3">
 
 						{
@@ -98,16 +98,16 @@ const ImageUpload = () => {
 							? (
 								<div className="flex items-center">
 									<ClipLoader size={16} color="#3b82f6"/>
-									<p className="text-xs text-gray-600 ml-2 font-medium">Uploading...</p>
+									<p className="text-xs text-gray-600 dark:text-gray-400 ml-2 font-medium">Uploading...</p>
 								</div>
 							)
 							: (
 								<>
 									<div className="flex items-center">
 										<FaCloudUploadAlt className="text-blue-500 mr-2" />
-										<span className="text-sm text-gray-700"><span className="font-semibold text-blue-600">Click to upload</span> or drag files</span>
+										<span className="text-sm text-gray-700 dark:text-gray-300"><span className="font-semibold text-blue-600 dark:text-blue-400">Click to upload</span> or drag files</span>
 									</div>
-									<p className="text-xs text-gray-500 mt-1">SVG, PNG, JPG, GIF (MAX. 5MB)</p>
+									<p className="text-xs text-gray-500 dark:text-gray-400 mt-1">SVG, PNG, JPG, GIF (MAX. 5MB)</p>
 								</>
 							)
 						}
