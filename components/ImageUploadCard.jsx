@@ -36,8 +36,12 @@ const ImageUpload = () => {
 		setIsLoading(true);
 		const success = await uploadImage(files);
 		handleImageUpdate();
-		setIsLoading(false)
-		toast.success("File uploaded!");
+		setIsLoading(false);
+		if (success) {
+			toast.success("File uploaded!");
+		} else {
+			toast.error("Upload failed!");
+		}
 	}
 
 	const onImageUpload = async (event) => {
@@ -56,8 +60,12 @@ const ImageUpload = () => {
 		setIsLoading(true);
 		const success = await uploadImage(files);
 		handleImageUpdate();
-		setIsLoading(false)
-		toast.success("File uploaded!");
+		setIsLoading(false);
+		if (success) {
+			toast.success("File uploaded!");
+		} else {
+			toast.error("Upload failed!");
+		}
 	}
 
 	return (
