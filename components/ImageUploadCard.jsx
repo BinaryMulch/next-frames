@@ -22,6 +22,15 @@ const ImageUpload = () => {
 
 		const files = event.dataTransfer.files;
 
+		// Validate file types
+		const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml'];
+		const invalidFiles = Array.from(files).filter(file => !validTypes.includes(file.type));
+
+		if (invalidFiles.length > 0) {
+			toast.error("Invalid file type! Only JPG, PNG, GIF, SVG allowed.");
+			return false;
+		}
+
 		const MAX_FILE_SIZE = 5 * 1024 * 1024;
 		const MAX_TOTAL_SIZE = 50 * 1024 * 1024;
 		let totalSize = 0;
@@ -48,6 +57,15 @@ const ImageUpload = () => {
 		event.preventDefault();
 
 		const files = event.target.files;
+
+		// Validate file types
+		const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml'];
+		const invalidFiles = Array.from(files).filter(file => !validTypes.includes(file.type));
+
+		if (invalidFiles.length > 0) {
+			toast.error("Invalid file type! Only JPG, PNG, GIF, SVG allowed.");
+			return false;
+		}
 
 		const MAX_FILE_SIZE = 5 * 1024 * 1024;
 		for (let i = 0; i < files.length; i ++) {
@@ -92,7 +110,7 @@ const ImageUpload = () => {
 
 
 				</div>
-				<input onInput={onImageUpload} id="dropzone-file" name="dropzone-file" type="file" className="hidden" />
+				<input onInput={onImageUpload} id="dropzone-file" name="dropzone-file" type="file" accept="image/jpeg,image/jpg,image/png,image/gif,image/svg+xml" className="hidden" />
 			</label>
 		</div>
 

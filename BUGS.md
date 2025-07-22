@@ -125,9 +125,9 @@ if (success) {
 }
 ```
 
-### 🐛 Bug #7: Missing File Type Validation
+### ✅ Bug #7: Missing File Type Validation
 **File:** `components/ImageUploadCard.jsx`  
-**Status:** Not Fixed  
+**Status:** FIXED  
 **Priority:** Medium  
 **Description:** UI mentions supported file types but doesn't validate them
 
