@@ -2,6 +2,7 @@
 
 import {createClient} from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import getAllImages from "./getAllImages";
 
 export default async function deleteImage(id, storageId) {
 
@@ -22,6 +23,9 @@ export default async function deleteImage(id, storageId) {
 	// delete image from database
 	const databaseSuccess = await deleteFromDatabase(supabase, id);
 	if (!databaseSuccess) return false;
+
+	// compact order positions to remove gaps
+	await compactOrderPositions(supabase);
 
 	// successfully delete image
 	revalidatePath("/slideshow");
@@ -59,4 +63,25 @@ export async function deleteFromDatabase(supabase, id) {
 
 	return true;
 
+}
+
+async function compactOrderPositions(supabase) {
+	try {
+		// Get all remaining images in order
+		const images = await getAllImages();
+		
+		// Update each image with a new sequential position
+		for (let i = 0; i < images.length; i++) {
+			const newPosition = i + 1;
+			if (images[i].order_position !== newPosition) {
+				await supabase
+					.from("images")
+					.update({ order_position: newPosition })
+					.eq("id", images[i].id);
+			}
+		}
+	} catch (error) {
+		console.error("Compact Order Positions Error: ", error);
+		// Don't throw - this is cleanup, shouldn't affect main deletion
+	}
 }

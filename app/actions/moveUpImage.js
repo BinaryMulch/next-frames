@@ -1,6 +1,7 @@
 "use server";
 
 import {createClient} from "@/utils/supabase/server";
+import {revalidatePath} from "next/cache";
 import getAllImages from "./getAllImages";
 
 async function moveUpImage(image) {
@@ -17,7 +18,7 @@ async function moveUpImage(image) {
 
 	// check if out of range
 	const images = await getAllImages();
-	if (image.order_position == images[0].order_position) return false;
+	if (image.order_position === images[0].order_position) return false;
 
 	// get the image above (lower order_position)
 	const {data, error: getAboveError} = await supabase
@@ -29,7 +30,7 @@ async function moveUpImage(image) {
 	const aboveImage = data[0];
 	if (!aboveImage) return false; // No image found to swap with
 
-	// swap order positions
+	// swap order positions with rollback capability
 	const currentPosition = image.order_position;
 	const abovePosition = aboveImage.order_position;
 
@@ -39,19 +40,29 @@ async function moveUpImage(image) {
 		.update({order_position: currentPosition})
 		.eq("id", aboveImage.id);
 
+	if (updateAboveError) {
+		console.log("Move Up Error (first update): ", updateAboveError);
+		return false;
+	}
+
 	// update current image to take the above image's position
 	const {error: updateThisError} = await supabase
 		.from("images")
 		.update({order_position: abovePosition})
 		.eq("id", image.id);
 	
-	if (updateAboveError || updateThisError) {
-		console.log("Move Up Error: ", updateAboveError);
-		console.log("Move Up Error: ", updateThisError);
+	if (updateThisError) {
+		console.log("Move Up Error (second update): ", updateThisError);
+		// Rollback the first update
+		await supabase
+			.from("images")
+			.update({order_position: abovePosition})
+			.eq("id", aboveImage.id);
 		return false;
 	}
 
 	// successfully moved image
+	revalidatePath("/slideshow");
 	return true;
 
 }

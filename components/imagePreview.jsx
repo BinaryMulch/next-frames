@@ -14,7 +14,7 @@ const PreviewImage = () => {
 
 	useEffect(
 		() => {
-			if (imagePreviewUrl != previousUrl) {
+			if (imagePreviewUrl !== previousUrl) {
 				setIsLoading(true);
 			}
 		},

@@ -350,6 +350,95 @@ const handleImageUpdate = async () => {
 }
 ```
 
+## Latest Bugs Found (Third Deep Analysis)
+
+### ✅ Bug #21: Inconsistent Equality in Move Operations
+**Files:** `app/actions/moveUpImage.js:20`, `app/actions/moveDownImage.js:20`  
+**Status:** FIXED  
+**Priority:** Low  
+**Description:** Using loose equality instead of strict equality in boundary checks
+```javascript
+// Current (inconsistent):
+if (image.order_position == images[0].order_position) return false;
+if (image.order_position == images[images.length - 1].order_position) return false;
+
+// Should be:
+if (image.order_position === images[0].order_position) return false;
+if (image.order_position === images[images.length - 1].order_position) return false;
+```
+
+### ✅ Bug #22: Missing Database Transaction in Move Operations
+**Files:** `app/actions/moveUpImage.js`, `app/actions/moveDownImage.js`  
+**Status:** FIXED  
+**Priority:** Medium  
+**Description:** Move operations could leave database in inconsistent state if one update fails
+```javascript
+// Current: Two separate updates without transaction
+const {error: updateAboveError} = await supabase...
+const {error: updateThisError} = await supabase...
+
+// Should use database transaction or implement rollback logic
+```
+
+### ✅ Bug #23: No Cleanup on Storage Upload Failure
+**File:** `app/actions/uploadImage.js:22`  
+**Status:** FIXED  
+**Priority:** Medium  
+**Description:** If storage upload fails, the loop continues without cleaning up previous successful uploads
+```javascript
+// Current: Early return leaves orphaned storage files
+if (!storageSuccess) return false;
+
+// Should clean up previously uploaded files in the loop
+```
+
+### ✅ Bug #24: Inconsistent Equality in Image Preview
+**File:** `components/imagePreview.jsx:17`  
+**Status:** FIXED  
+**Priority:** Low  
+**Description:** Using loose equality instead of strict equality
+```javascript
+// Current:
+if (imagePreviewUrl != previousUrl) {
+
+// Should be:
+if (imagePreviewUrl !== previousUrl) {
+```
+
+### ✅ Bug #25: Hard-coded Supabase URL in Next.js Config
+**File:** `next.config.mjs:12`  
+**Status:** FIXED  
+**Priority:** Medium  
+**Description:** Supabase hostname is hard-coded, should use environment variable
+```javascript
+// Current (hard-coded):
+hostname: "olspbesdefesqvhvbohi.supabase.co",
+
+// Should be dynamic:
+hostname: process.env.NEXT_PUBLIC_SUPABASE_URL?.replace('https://', '').split('.')[0] + '.supabase.co',
+```
+
+### ✅ Bug #26: Missing Revalidation in Move Operations  
+**Files:** `app/actions/moveUpImage.js`, `app/actions/moveDownImage.js`  
+**Status:** FIXED  
+**Priority:** Low  
+**Description:** Move operations don't revalidate paths like delete does
+```javascript
+// Missing after successful move:
+revalidatePath("/slideshow");
+```
+
+### ✅ Bug #27: Order Position Gaps After Deletion
+**File:** `app/actions/deleteImage.js`  
+**Status:** FIXED  
+**Priority:** Medium  
+**Description:** Deleting images creates gaps in order_position sequence (1,2,4,5...)
+```javascript
+// After deletion, should compact order positions
+// Current: No compaction logic
+// Should add: Renumber remaining images to close gaps
+```
+
 ---
 
 ## How to Use This Document

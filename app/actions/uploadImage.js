@@ -10,6 +10,8 @@ export async function uploadImage(files) {
 	// validate user session
 	if (!validateUserSession(supabase)) return false;
 
+	const uploadedStorageIds = []; // Track successful uploads for cleanup
+
 	// upload images
 	for (let i = 0; i < files.length; i ++) {
 		const file = files[i];
@@ -19,7 +21,12 @@ export async function uploadImage(files) {
 
 		// upload image to storage
 		const storageSuccess = await uploadImageToStorage(supabase, storageId, file);
-		if (!storageSuccess) return false;
+		if (!storageSuccess) {
+			// Clean up previously uploaded files
+			await cleanupStorageFiles(supabase, uploadedStorageIds);
+			return false;
+		}
+		uploadedStorageIds.push(storageId);
 
 		// get public url to image
 		const publicUrl = await getPublicUrl(supabase, storageId);
@@ -27,7 +34,8 @@ export async function uploadImage(files) {
 		// add image to database
 		const databaseSuccess = await insertImageToDatabase(supabase, file, publicUrl, storageId);
 		if (!databaseSuccess) {
-			deleteFromStorage(supabase, storageId);
+			// Clean up all uploaded files including current one
+			await cleanupStorageFiles(supabase, uploadedStorageIds);
 			return false;
 		}
 
@@ -36,6 +44,20 @@ export async function uploadImage(files) {
 	// successfully uploaded images
 	return true;
 
+}
+
+async function cleanupStorageFiles(supabase, storageIds) {
+	if (storageIds.length === 0) return;
+	
+	try {
+		await supabase
+			.storage
+			.from("images")
+			.remove(storageIds);
+	} catch (error) {
+		console.error("Cleanup Error: ", error);
+		// Don't throw - this is cleanup, shouldn't affect main flow
+	}
 }
 
 async function validateUserSession(supabase) {
