@@ -17,6 +17,7 @@ A modern, enterprise-grade image slideshow management system built with Next.js 
 - **Dynamic Slideshow**: Auto-cycling full-screen display with smooth transitions
 - **Real-time Preview**: Instant image preview with optimized loading states
 - **Intelligent Reordering**: Drag-to-reorder functionality with optimistic updates
+- **Seasonal Image Control**: Pause/unpause images to temporarily hide them from slideshow while keeping them in management list
 
 ### User Experience
 - **Light/Dark Theme Toggle**: Professional theme switching with localStorage persistence
@@ -71,12 +72,21 @@ A modern, enterprise-grade image slideshow management system built with Next.js 
      url text NOT NULL,
      storage_id text NOT NULL,
      order_position integer NOT NULL,
+     is_paused boolean DEFAULT false NOT NULL,
      created_at timestamptz DEFAULT now()
    );
    
    -- Create indexes for optimal performance
    CREATE INDEX idx_images_order_position ON images(order_position);
    CREATE INDEX idx_images_created_at ON images(created_at);
+   CREATE INDEX idx_images_is_paused ON images(is_paused);
+   ```
+
+   **For existing installations**: Add the pause functionality to existing databases:
+   ```sql
+   -- Add is_paused column to existing installations
+   ALTER TABLE images ADD COLUMN is_paused boolean DEFAULT false NOT NULL;
+   CREATE INDEX idx_images_is_paused ON images(is_paused);
    ```
 
 5. **Storage Configuration**
@@ -99,6 +109,7 @@ A modern, enterprise-grade image slideshow management system built with Next.js 
 - **Upload Management**: Multi-file drag & drop upload with real-time progress
 - **Image Reordering**: Intuitive up/down controls for slideshow sequencing
 - **Preview System**: Full-size image preview with loading optimization
+- **Pause Control**: Pause/unpause individual images to exclude them from slideshow temporarily
 - **Deletion Control**: Safe image removal with confirmation prompts
 - **Theme Customization**: Light/dark mode toggle with system preference detection
 - **Real-time Synchronization**: Instant updates across all connected sessions
@@ -233,12 +244,15 @@ NEXT_PUBLIC_ANALYTICS_ID=your_analytics_id
 
 ## Version History
 
-### v0.3.0 - Theme System Release
+### v0.3.0 - Theme System & Seasonal Image Control
 - Implemented comprehensive light/dark theme system
 - Added theme toggle with localStorage persistence
 - Enhanced UI consistency across all components
 - Improved accessibility with better contrast ratios
 - Updated navigation and button visibility for dark mode
+- Added pause/unpause functionality for seasonal image management
+- Implemented visual indicators for paused images in dashboard
+- Updated slideshow to exclude paused images automatically
 
 ### v0.2.0 - Performance Enhancement
 - Introduced optimistic UI updates for improved responsiveness

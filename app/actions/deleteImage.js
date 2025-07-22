@@ -68,7 +68,7 @@ export async function deleteFromDatabase(supabase, id) {
 async function compactOrderPositions(supabase) {
 	try {
 		// Get all remaining images in order
-		const images = await getAllImages();
+		const images = await getAllImages(true, true); // requireAuth=true, includesPaused=true
 		
 		// Update each image with a new sequential position
 		for (let i = 0; i < images.length; i++) {

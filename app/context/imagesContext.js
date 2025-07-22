@@ -131,22 +131,32 @@ export const ImagesProvider = ({children}) => {
 		isProcessingQueue.current = true;
 		setIsReordering(true);
 
+		let allSuccessful = true;
+
 		while (operationQueue.current.length > 0) {
 			const operation = operationQueue.current.shift();
 			
 			try {
 				const success = await operation.action();
 				if (!success) {
-					// If operation failed, refresh from server to correct state
-					await handleImageUpdate();
+					allSuccessful = false;
+					console.error("Operation failed for:", operation.imageId);
 					break;
 				}
 			} catch (error) {
 				console.error("Operation failed:", error);
-				await handleImageUpdate();
+				allSuccessful = false;
 				break;
 			}
 		}
+
+		// Only refresh if operations failed (optimistic updates should be correct for successful operations)
+		if (!allSuccessful) {
+			await handleImageUpdate();
+		}
+
+		// Small delay to show operation completion before removing loading state
+		await new Promise(resolve => setTimeout(resolve, 100));
 
 		isProcessingQueue.current = false;
 		setIsReordering(false);
@@ -162,17 +172,29 @@ export const ImagesProvider = ({children}) => {
 		// Claim active status for this user
 		claimActiveStatus();
 
-		// Apply optimistic update immediately
+		// Apply optimistic update immediately with proper order_position sync
 		setImages(prevImages => {
 			const imagesCopy = [...prevImages];
 			const currentIndex = imagesCopy.findIndex(img => img.id === imageToMove.id);
 			
 			if (direction === 'up' && currentIndex > 0) {
+				// Swap positions in array for immediate visual feedback
 				[imagesCopy[currentIndex - 1], imagesCopy[currentIndex]] = 
 				[imagesCopy[currentIndex], imagesCopy[currentIndex - 1]];
+				
+				// Update order_position to match array positions (1-based)
+				imagesCopy.forEach((img, index) => {
+					img.order_position = index + 1;
+				});
 			} else if (direction === 'down' && currentIndex < imagesCopy.length - 1) {
+				// Swap positions in array for immediate visual feedback
 				[imagesCopy[currentIndex], imagesCopy[currentIndex + 1]] = 
 				[imagesCopy[currentIndex + 1], imagesCopy[currentIndex]];
+				
+				// Update order_position to match array positions (1-based)
+				imagesCopy.forEach((img, index) => {
+					img.order_position = index + 1;
+				});
 			}
 			
 			return imagesCopy;
@@ -189,6 +211,49 @@ export const ImagesProvider = ({children}) => {
 		processOperationQueue();
 	};
 
+	const toggleImagePauseOptimistic = useCallback((imageId, serverAction) => {
+		// Check if operations are blocked
+		checkForActiveUser();
+		if (isBlocked) {
+			throw new Error('Another user is currently managing images. Please wait.');
+		}
+
+		// Claim active status for this user
+		claimActiveStatus();
+
+		// Apply optimistic update immediately
+		setImages(prevImages => {
+			return prevImages.map(img => 
+				img.id === imageId 
+					? { ...img, is_paused: !img.is_paused }
+					: img
+			);
+		});
+
+		// Execute server action asynchronously
+		serverAction().then(success => {
+			if (!success) {
+				// Revert optimistic update if server action failed
+				setImages(prevImages => {
+					return prevImages.map(img => 
+						img.id === imageId 
+							? { ...img, is_paused: !img.is_paused }
+							: img
+					);
+				});
+			}
+		}).catch(() => {
+			// Revert optimistic update on error
+			setImages(prevImages => {
+				return prevImages.map(img => 
+					img.id === imageId 
+						? { ...img, is_paused: !img.is_paused }
+						: img
+				);
+			});
+		});
+	}, [isBlocked, claimActiveStatus, checkForActiveUser]);
+
 	const contextValue = useMemo(() => ({
 		images, 
 		handleImageUpdate, 
@@ -197,11 +262,12 @@ export const ImagesProvider = ({children}) => {
 		isReordering, 
 		setIsReordering,
 		queueMoveOperation,
+		toggleImagePauseOptimistic,
 		isBlocked,
 		activeUser,
 		currentUser,
 		claimActiveStatus
-	}), [images, handleImageUpdate, imagePreviewUrl, handleImagePreview, isReordering, isBlocked, activeUser, currentUser, claimActiveStatus]);
+	}), [images, handleImageUpdate, imagePreviewUrl, handleImagePreview, isReordering, isBlocked, activeUser, currentUser, claimActiveStatus, toggleImagePauseOptimistic]);
 
 	return (
 

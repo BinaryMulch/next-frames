@@ -95,7 +95,7 @@ function getPublicUrl(supabase, storageId) {
 }
 
 async function insertImageToDatabase(supabase, file, publicUrl, storageId) {
-	const images = await getAllImages();
+	const images = await getAllImages(true, true); // requireAuth=true, includesPaused=true
 	let next_position = 1
 	if (images.length > 0) next_position = images[images.length - 1].order_position + 1
 

@@ -2,7 +2,7 @@
 
 import {createClient} from "@/utils/supabase/server";
 
-async function getAllImages(requireAuth = true) {
+async function getAllImages(requireAuth = true, includesPaused = true) {
 
 	const supabase = await createClient();
 
@@ -16,10 +16,15 @@ async function getAllImages(requireAuth = true) {
 		}
 	}
 
-	// get all images
-	const {data, error} = await supabase
-		.from("images")
-		.select();
+	// get images with optional pause filtering
+	let query = supabase.from("images").select();
+	
+	// For slideshow, exclude paused images
+	if (!includesPaused) {
+		query = query.eq("is_paused", false);
+	}
+
+	const {data, error} = await query;
 
 	if (error) {
 		console.error("Database Error: ", error);

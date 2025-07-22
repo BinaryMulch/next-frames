@@ -9,7 +9,7 @@ const SlideshowPage = () => {
 
 	async function fetchImages() {
 		try {
-			const imageData = await getAllImages(false); // Public access for slideshow
+			const imageData = await getAllImages(false, false); // Public access, exclude paused images
 			setImages(
 				imageData.map(
 					(image) => (image.url)
