@@ -88,25 +88,26 @@ const ImageUpload = () => {
 
 	return (
 
-		<div className="p-6 border-b border-gray-200">
-			<h3 className="text-lg font-semibold text-gray-900 mb-4">Upload Images</h3>
+		<div className="p-4 border-b border-gray-200">
 			<div onDragOver={handleDragOver} onDrop={handleDrop} className="flex items-center justify-center w-full">
-				<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-white hover:bg-blue-50 hover:border-blue-400 transition-colors duration-200">
-					<div className="flex flex-col items-center justify-center py-6">
+				<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-white hover:bg-blue-50 hover:border-blue-400 transition-colors duration-200">
+					<div className="flex flex-col items-center justify-center py-3">
 
 						{
 							isLoading
 							? (
-								<div className="flex flex-col items-center">
-									<ClipLoader size={32} color="#3b82f6"/>
-									<p className="text-sm text-gray-600 mt-3 font-medium">Uploading...</p>
+								<div className="flex items-center">
+									<ClipLoader size={16} color="#3b82f6"/>
+									<p className="text-xs text-gray-600 ml-2 font-medium">Uploading...</p>
 								</div>
 							)
 							: (
 								<>
-									<FaCloudUploadAlt className="text-3xl text-blue-500 mb-3" />
-									<p className="mb-1 text-sm text-gray-700"><span className="font-semibold text-blue-600">Click to upload</span> or drag and drop</p>
-									<p className="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 5MB)</p>
+									<div className="flex items-center">
+										<FaCloudUploadAlt className="text-blue-500 mr-2" />
+										<span className="text-sm text-gray-700"><span className="font-semibold text-blue-600">Click to upload</span> or drag files</span>
+									</div>
+									<p className="text-xs text-gray-500 mt-1">SVG, PNG, JPG, GIF (MAX. 5MB)</p>
 								</>
 							)
 						}

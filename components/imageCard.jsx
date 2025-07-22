@@ -10,13 +10,13 @@ const ImageCard = memo(({image}) => {
 
 	return (
 
-			<div className="group flex items-center p-4 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-200 xl:flex-row flex-col gap-4">
-				<div className="flex-grow min-w-0">
-					<p className="text-gray-900 font-semibold truncate" title={image.name}>
+			<div className="group flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-200">
+				<div className="flex-grow min-w-0 mr-4">
+					<p className="text-gray-900 font-medium text-sm truncate" title={image.name}>
 						{image.name}
 					</p>
 					<p className="text-xs text-gray-500 mt-1">
-						Image • Position {image.position}
+						Position {image.order_position} • {image.name.split('.').pop().toUpperCase()}
 					</p>
 				</div>
 				<div className="flex items-center bg-gray-50 rounded-lg p-1 shrink-0">

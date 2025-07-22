@@ -31,7 +31,7 @@ const DeleteButton = ({id, storageId}) => {
 		<button 
 			onClick={handleDeleteClick} 
 			disabled={isReordering || isLoading}
-			className={`p-2 rounded-md transition-colors ${
+			className={`p-2 rounded-lg transition-colors ${
 				isReordering || isLoading 
 					? 'text-gray-400 cursor-not-allowed' 
 					: 'text-red-600 hover:text-red-700 hover:bg-red-50'

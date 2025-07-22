@@ -29,7 +29,7 @@ export default function LoginPage() {
 		<>
 			<div className="bg-gray-50 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
 				<div className="sm:mx-auto sm:w-full sm:max-w-md">
-					<div className="bg-white py-12 px-8 shadow-lg rounded-xl border border-gray-200">
+					<div className="bg-white p-8 shadow-lg rounded-lg border border-gray-200">
 						<div className="text-center mb-8">
 							<h1 className="text-3xl font-bold text-gray-900">Next Frames</h1>
 							<p className="mt-2 text-sm text-gray-600">Sign in to your account</p>

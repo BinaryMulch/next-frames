@@ -12,7 +12,7 @@ const PreviewButton = ({url}) => {
 
 		<button onClick={
 			() => handleImagePreview(url)
-		} className="p-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors" title="Preview image">
+		} className="p-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors" title="Preview image">
 			<FaEye />
 		</button>
 

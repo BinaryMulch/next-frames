@@ -23,7 +23,7 @@ const MoveDownButton = ({image}) => {
 		<button 
 			onClick={handleMoveClick} 
 			disabled={isBlocked}
-			className={`p-2 rounded-md transition-colors ${
+			className={`p-2 rounded-lg transition-colors ${
 				isBlocked 
 					? 'text-gray-400 cursor-not-allowed' 
 					: 'text-gray-600 hover:text-gray-700 hover:bg-gray-100'
