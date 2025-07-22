@@ -27,77 +27,79 @@ export default function LoginPage() {
 	return (
 
 		<>
-			<div className="bg-gray-900 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-				<div className="sm:mx-auto sm:w-full sm:max-w-sm">
-					<h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Next Frames</h2>
-				</div>
+			<div className="bg-gray-50 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+				<div className="sm:mx-auto sm:w-full sm:max-w-md">
+					<div className="bg-white py-12 px-8 shadow-lg rounded-xl border border-gray-200">
+						<div className="text-center mb-8">
+							<h1 className="text-3xl font-bold text-gray-900">Next Frames</h1>
+							<p className="mt-2 text-sm text-gray-600">Sign in to your account</p>
+						</div>
 
-				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+						{error &&
+							(
+								<div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+									<p className="text-sm text-red-600 text-center">{error}</p>
+								</div>
+							)
+						}
 
-					{error &&
-						(
-							<div className="mb-4 text-center text-red-500">
-								{error}
-							</div>
-						)
-					}
-
-					<form onSubmit={handleSubmit} className="space-y-6">
-						<div>
-							<label htmlFor="email" className="block text-sm/6 font-medium text-white">
-								Email address
-							</label>
-							<div className="mt-2">
+						<form onSubmit={handleSubmit} className="space-y-6">
+							<div>
+								<label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-2">
+									Email address
+								</label>
 								<input
 									id="email"
 									name="email"
 									type="email"
 									required
 									autoComplete="email"
-									className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+									className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 focus:outline-none transition-colors"
+									placeholder="Enter your email"
 								/>
 							</div>
-						</div>
 
-						<div>
-							<div className="flex items-center justify-between">
-								<label htmlFor="password" className="block text-sm/6 font-medium text-white">
+							<div>
+								<label htmlFor="password" className="block text-sm font-semibold text-gray-900 mb-2">
 									Password
 								</label>
-							</div>
-							<div className="mt-2">
 								<input
 									id="password"
 									name="password"
 									type="password"
 									required
 									autoComplete="current-password"
-									className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+									className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 focus:outline-none transition-colors"
+									placeholder="Enter your password"
 								/>
 							</div>
-						</div>
 
-						<div>
-							{loading
-								? (
-									<button
-										className="cursor-not-allowed flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-									>
-										Signing in...
-									</button>
-								)
-								: (
-									<button
-										type="submit"
-										className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-									>
-										Sign in
-									</button>
-								)
-							}
-						</div>
-					</form>
-
+							<div className="pt-2">
+								{loading
+									? (
+										<button
+											disabled
+											className="w-full flex justify-center items-center rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm cursor-not-allowed opacity-75"
+										>
+											<svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+												<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+												<path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+											</svg>
+											Signing in...
+										</button>
+									)
+									: (
+										<button
+											type="submit"
+											className="w-full flex justify-center rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+										>
+											Sign in
+										</button>
+									)
+								}
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</>

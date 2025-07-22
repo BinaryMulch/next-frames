@@ -20,12 +20,12 @@ const DashboardPage = async () => {
 		<>
 		<Navbar />
 		<ImagesProvider>
-			<section className="h-[calc(100vh-64px)] bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
-				<div className="h-full flex flex-col px-4 py-6">
+			<section className="h-[calc(100vh-65px)] bg-gray-50 overflow-hidden">
+				<div className="h-full flex flex-col px-6 py-6">
 					<ActiveUserBanner />
-					<div className="mb-6 flex-shrink-0">
+					<div className="mb-8 flex-shrink-0">
 						<h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-						<p className="text-gray-600">Manage your slideshow images and preview them in real-time</p>
+						<p className="text-gray-600 text-lg">Manage your slideshow images and preview them in real-time</p>
 					</div>
 					
 					<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 flex-1 min-h-0">

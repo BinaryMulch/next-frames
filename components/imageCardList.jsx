@@ -28,12 +28,12 @@ const ImageCardList = memo(() => {
 			{!isLoading ? (
 				images.length > 0 ? (
 					<>
-						<div className="flex items-center justify-between p-4 pb-2 flex-shrink-0">
-							<h3 className="text-sm font-semibold text-gray-700">
+						<div className="flex items-center justify-between p-6 pb-4 flex-shrink-0">
+							<h3 className="text-lg font-semibold text-gray-900">
 								Images ({images.length})
 							</h3>
 						</div>
-						<div className="flex-1 overflow-y-auto px-4 pb-4">
+						<div className="flex-1 overflow-y-auto px-6 pb-6">
 							<div className="flex flex-col gap-3">
 								{
 									images.map(

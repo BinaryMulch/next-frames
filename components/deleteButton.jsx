@@ -1,7 +1,7 @@
 "use client";
 
 import {useContext, useState} from "react";
-import {FaTrashAlt} from "react-icons/fa";
+import {FaTrash} from "react-icons/fa";
 import {toast} from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -9,7 +9,7 @@ import deleteImage from "@/app/actions/deleteImage";
 import {ImagesContext} from "@/app/context/imagesContext";
 
 const DeleteButton = ({id, storageId}) => {
-	const {handleImageUpdate} = useContext(ImagesContext);
+	const {handleImageUpdate, isReordering} = useContext(ImagesContext);
 
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -28,20 +28,21 @@ const DeleteButton = ({id, storageId}) => {
 
 	return (
 
-		<button onClick={handleDeleteClick} className="ml-2 mx-1 p-2 bg-red-600 text-white shadow rounded-lg hover:bg-red-700">
+		<button 
+			onClick={handleDeleteClick} 
+			disabled={isReordering || isLoading}
+			className={`p-2 rounded-md transition-colors ${
+				isReordering || isLoading 
+					? 'text-gray-400 cursor-not-allowed' 
+					: 'text-red-600 hover:text-red-700 hover:bg-red-50'
+			}`}
+			title="Delete image"
+		>
 			{
 				isLoading
-				? (
-					<div className="flex justify-center items-center">
-						<ClipLoader size={16} color="#ffffff"/>
-					</div>
-					
-				)
-				: (
-					<FaTrashAlt />
-				)
+				? <ClipLoader size={16} color="#9ca3af"/>
+				: <FaTrash />
 			}
-			
 		</button>
 
 	);

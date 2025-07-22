@@ -32,18 +32,18 @@ const ActiveUserBanner = () => {
 	return (
 		<>
 			{isBlocked && (
-				<div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-lg flex-shrink-0">
+				<div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl flex-shrink-0 shadow-sm">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center">
-							<div className="w-3 h-3 bg-amber-500 rounded-full mr-3 animate-pulse"></div>
+							<div className="w-3 h-3 bg-yellow-500 rounded-full mr-3 animate-pulse"></div>
 							<div>
-								<p className="text-amber-800 font-medium">Another user is managing images</p>
-								<p className="text-amber-600 text-sm">Image management is temporarily locked to prevent conflicts</p>
+								<p className="text-yellow-900 font-semibold">Another user is managing images</p>
+								<p className="text-yellow-700 text-sm mt-1">Image management is temporarily locked to prevent conflicts</p>
 							</div>
 						</div>
 						<button
 							onClick={claimActiveStatus}
-							className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
+							className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm font-semibold shadow-sm"
 						>
 							Take Control
 						</button>

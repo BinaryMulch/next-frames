@@ -23,10 +23,10 @@ const MoveUpButton = ({image}) => {
 		<button 
 			onClick={handleMoveClick} 
 			disabled={isBlocked}
-			className={`mx-1 p-2 text-white rounded-lg shadow transition-colors ${
+			className={`p-2 rounded-md transition-colors ${
 				isBlocked 
-					? 'bg-gray-400 cursor-not-allowed' 
-					: 'bg-primary-600 hover:bg-primary-700'
+					? 'text-gray-400 cursor-not-allowed' 
+					: 'text-gray-600 hover:text-gray-700 hover:bg-gray-100'
 			}`}
 			title={isBlocked ? "Another user is managing images" : "Move image up"}
 		>
