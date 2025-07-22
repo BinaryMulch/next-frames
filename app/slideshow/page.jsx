@@ -31,19 +31,11 @@ const SlideshowPage = () => {
 		}, []
 	);
 
-	/*
-	const imageData = await getAllImages();
-
-	const images = imageData.map(
-		(image) => (image.url)
-	)
-	*/
-
 	return (
 
 		<>
 			{
-				!images || images.length == 0
+				!images || images.length === 0
 				? (
 					<></>
 				)

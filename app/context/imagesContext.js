@@ -13,8 +13,13 @@ export const ImagesProvider = ({children}) => {
 	const [isReordering, setIsReordering] = useState(false);
 	
 	const handleImageUpdate = async () => {
-		const data = await getAllImages();
-		setImages(data);
+		try {
+			const data = await getAllImages();
+			setImages(data || []);
+		} catch (error) {
+			console.error("Error updating images: ", error);
+			setImages([]);
+		}
 	}
 
 	const handleImagePreview = (url) => {

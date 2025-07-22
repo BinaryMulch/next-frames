@@ -263,6 +263,93 @@ console.log("Move Down Error: ", updateAboveError);
 console.log("Move Down Error: ", updateThisError);
 ```
 
+## New Bugs Found (Second Re-Analysis)
+
+### ✅ Bug #16: Dead Code in Slideshow Page
+**File:** `app/slideshow/page.jsx:34-40`  
+**Status:** FIXED  
+**Priority:** Low  
+**Description:** Commented out code that should be removed for cleaner codebase
+```javascript
+// Remove this commented code block:
+/*
+const imageData = await getAllImages();
+
+const images = imageData.map(
+    (image) => (image.url)
+)
+*/
+```
+
+### ✅ Bug #17: Client-Side Redirect in Navbar
+**File:** `components/navbar.jsx:14`  
+**Status:** FIXED  
+**Priority:** Medium  
+**Description:** Using server-side redirect in client component will cause error
+```javascript
+// Current (incorrect):
+import { redirect } from 'next/navigation';
+const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    redirect("/login"); // This won't work in client component
+}
+
+// Should use:
+window.location.href = '/login';
+// or use router.push() from next/navigation
+```
+
+### ✅ Bug #18: Missing File Input Multiple Attribute
+**File:** `components/ImageUploadCard.jsx:113`  
+**Status:** FIXED  
+**Priority:** Medium  
+**Description:** File input doesn't allow multiple file selection but code handles multiple files
+```javascript
+// Current (single file only):
+<input ... type="file" ... />
+
+// Should be (to match multi-file handling logic):
+<input ... type="file" multiple ... />
+```
+
+### ✅ Bug #19: Inconsistent Equality Operators
+**File:** `app/slideshow/page.jsx:46`  
+**Status:** FIXED  
+**Priority:** Low  
+**Description:** Using loose equality instead of strict equality
+```javascript
+// Current:
+!images || images.length == 0
+
+// Should be:
+!images || images.length === 0
+```
+
+### ✅ Bug #20: Missing Error Handling in ImagesContext
+**File:** `app/context/imagesContext.js:15-17`  
+**Status:** FIXED  
+**Priority:** Medium  
+**Description:** handleImageUpdate has no error handling
+```javascript
+// Current (no error handling):
+const handleImageUpdate = async () => {
+    const data = await getAllImages();
+    setImages(data);
+}
+
+// Should include error handling:
+const handleImageUpdate = async () => {
+    try {
+        const data = await getAllImages();
+        setImages(data || []);
+    } catch (error) {
+        console.error("Error updating images: ", error);
+        setImages([]);
+    }
+}
+```
+
 ---
 
 ## How to Use This Document

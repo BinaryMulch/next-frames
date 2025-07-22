@@ -110,7 +110,7 @@ const ImageUpload = () => {
 
 
 				</div>
-				<input onInput={onImageUpload} id="dropzone-file" name="dropzone-file" type="file" accept="image/jpeg,image/jpg,image/png,image/gif,image/svg+xml" className="hidden" />
+				<input onInput={onImageUpload} id="dropzone-file" name="dropzone-file" type="file" multiple accept="image/jpeg,image/jpg,image/png,image/gif,image/svg+xml" className="hidden" />
 			</label>
 		</div>
 

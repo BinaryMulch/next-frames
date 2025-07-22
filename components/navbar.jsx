@@ -4,14 +4,15 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 import { createClient } from '@/utils/supabase/client';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
+	const router = useRouter();
 
 	const handleSignOut = async () => {
 		const supabase = createClient();
 		await supabase.auth.signOut();
-		redirect("/login");
+		router.push('/login');
 	}
 
 	return (
