@@ -10,6 +10,7 @@ export const ImagesProvider = ({children}) => {
 
 	const [images, setImages] = useState([]);
 	const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+	const [isReordering, setIsReordering] = useState(false);
 	
 	const handleImageUpdate = async () => {
 		const data = await getAllImages();
@@ -22,7 +23,7 @@ export const ImagesProvider = ({children}) => {
 
 	return (
 
-		<ImagesContext.Provider value={{images, handleImageUpdate, imagePreviewUrl, handleImagePreview}}>
+		<ImagesContext.Provider value={{images, handleImageUpdate, imagePreviewUrl, handleImagePreview, isReordering, setIsReordering}}>
 			{children}
 		</ImagesContext.Provider>
 

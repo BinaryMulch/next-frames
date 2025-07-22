@@ -142,17 +142,17 @@ if (invalidFiles.length > 0) {
 }
 ```
 
-### 🐛 Bug #8: Race Condition in Image Reordering
+### ✅ Bug #8: Race Condition in Image Reordering
 **Files:** `app/actions/moveUpImage.js`, `app/actions/moveDownImage.js`  
-**Status:** Not Fixed  
+**Status:** FIXED  
 **Priority:** Medium  
 **Description:** Simultaneous move operations could create duplicate order_position values
 
 **Suggested fix:** Add database transaction or locking mechanism
 
-### 🐛 Bug #9: Carousel Index Bounds Risk
+### ✅ Bug #9: Carousel Index Bounds Risk
 **File:** `components/carousel.jsx:33-36`  
-**Status:** Not Fixed  
+**Status:** FIXED  
 **Priority:** Low  
 **Description:** Race condition where currentIndex might exceed array length when images change
 

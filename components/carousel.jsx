@@ -7,12 +7,15 @@ const Carousel = ({images}) => {
 
 	useEffect(
 		() => {
-			if (!images || images.length == 0) return;
+			if (!images || images.length === 0) return;
 
 			const interval = setInterval(
 				() => {
 					setCurrentIndex(
-						(lastIndex) => (lastIndex + 1) % images.length
+						(lastIndex) => {
+							if (!images || images.length === 0) return 0;
+							return (lastIndex + 1) % images.length;
+						}
 					);
 				},
 				10000
@@ -20,12 +23,12 @@ const Carousel = ({images}) => {
 
 			return () => clearInterval(interval);
 		},
-		[images.length]
+		[images, images.length]
 	);
 
 	useEffect(
 		() => {
-			if (images.length == 0) {
+			if (!images || images.length === 0) {
 				setCurrentIndex(0);
 				return;
 			}
@@ -33,27 +36,30 @@ const Carousel = ({images}) => {
 			if (currentIndex >= images.length) {
 				setCurrentIndex(0);
 			}
-		}, [images.length, currentIndex]
+		}, [images, images.length, currentIndex]
 	);
 
 	return (
 
 		<div className="cursor-none h-screen w-screen overflow-hidden relative bg-black">
-			<div className="flex h-full transition-transform duration-700" style={{ transform: `translateX(-${currentIndex * 100}vw)`}}>
-				{
-					images.map(
-						(image, index) => (
-							<div key={index} className="w-screen h-screen flex-shrink-0">
-								<img
-									key={index}
-									src={image}
-									className="w-screen h-screen object-contain flex-shrink-0"
-								/>
-							</div>
+			{images && images.length > 0 && (
+				<div className="flex h-full transition-transform duration-700" style={{ transform: `translateX(-${Math.min(currentIndex, images.length - 1) * 100}vw)`}}>
+					{
+						images.map(
+							(image, index) => (
+								<div key={index} className="w-screen h-screen flex-shrink-0">
+									<img
+										key={index}
+										src={image}
+										className="w-screen h-screen object-contain flex-shrink-0"
+										alt={`Slide ${index + 1}`}
+									/>
+								</div>
+							)
 						)
-					)
-				}
-			</div>
+					}
+				</div>
+			)}
 		</div>
 
 	);
