@@ -8,14 +8,14 @@ import ClipLoader from "react-spinners/ClipLoader";
 import deleteImage from "@/app/actions/deleteImage";
 import {ImagesContext} from "@/app/context/imagesContext";
 
-const DeleteButton = ({id, storageId}) => {
+const DeleteButton = ({id}) => {
 	const {handleImageUpdate} = useContext(ImagesContext);
 
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleDeleteClick = async () => {
 		setIsLoading(true);
-		const success = await deleteImage(id, storageId);
+		const success = await deleteImage(id);
 		if (!success) {
 			toast.error("File could not be deleted!");
 			setIsLoading(false);

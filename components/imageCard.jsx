@@ -12,10 +12,10 @@ const ImageCard = ({image}) => {
 			<div className="flex items-center p-4 bg-white rounded-lg shadow xl:flex-row flex-col">
 				<p className="flex flex-grow text-gray-700">{image.name}</p>
 				<div className="pt-2">
-					<PreviewButton url={image.url} />
+					<PreviewButton image={image} />
 					<MoveUpButton image={image} />
 					<MoveDownButton image={image} />
-					<DeleteButton id={image.id} storageId={image.storage_id} />
+					<DeleteButton id={image.id} />
 				</div>
 
 			</div>

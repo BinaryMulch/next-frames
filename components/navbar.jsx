@@ -3,15 +3,19 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from '@/utils/pocketbase/client';
 import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
 	const router = useRouter();
 
 	const handleSignOut = async () => {
-		const supabase = createClient();
-		await supabase.auth.signOut();
+		const pb = createClient();
+		pb.authStore.clear();
+		
+		// Clear auth cookie
+		document.cookie = 'pb_auth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+		
 		router.push('/login');
 	}
 

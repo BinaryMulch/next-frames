@@ -8,10 +8,16 @@ const nextConfig = {
 				pathname: "**"
 			},
 			{
-				protocol: "https",
-				hostname: process.env.NEXT_PUBLIC_SUPABASE_URL ? 
-					new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname : 
-					"*.supabase.co",
+				protocol: "http",
+				hostname: "127.0.0.1",
+				port: "8090",
+				pathname: "**"
+			},
+			{
+				protocol: "https", 
+				hostname: process.env.NEXT_PUBLIC_POCKETBASE_URL ? 
+					new URL(process.env.NEXT_PUBLIC_POCKETBASE_URL).hostname : 
+					"localhost",
 				pathname: "**"
 			}
 		]

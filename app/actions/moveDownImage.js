@@ -1,18 +1,16 @@
 "use server";
 
-import {createClient} from "@/utils/supabase/server";
+import {createClient, getAuthUser} from "@/utils/pocketbase/server";
 import {revalidatePath} from "next/cache";
 import getAllImages from "./getAllImages";
 
 async function moveDownImage(image) {
-
-	const supabase = await createClient();
+	const pb = await createClient();
 
 	// validate user session
-	const {data: authData, error: authError} = await supabase.auth.getUser();
-
-	if (authError || !authData.user) {
-		console.error("Auth Error: ", authError);
+	const user = await getAuthUser();
+	if (!user) {
+		console.error("Auth Error: No authenticated user");
 		return false;
 	}
 
@@ -20,52 +18,49 @@ async function moveDownImage(image) {
 	const images = await getAllImages();
 	if (image.order_position === images[images.length - 1].order_position) return false;
 
-	// get the image below (higher order_position)
-	const {data, error: getBelowError} = await supabase
-		.from("images")
-		.select()
-		.eq("order_position", image.order_position + 1);
-	if (getBelowError) return false;
+	try {
+		// find the image below (higher order_position)
+		const belowImages = await pb.collection('images').getFullList({
+			filter: `order_position = ${image.order_position + 1}`,
+		});
+		
+		if (belowImages.length === 0) return false; // No image found to swap with
+		const belowImage = belowImages[0];
 
-	const belowImage = data[0];
-	if (!belowImage) return false; // No image found to swap with
+		// swap order positions with rollback capability
+		const currentPosition = image.order_position;
+		const belowPosition = belowImage.order_position;
 
-	// swap order positions with rollback capability
-	const currentPosition = image.order_position;
-	const belowPosition = belowImage.order_position;
+		// update the image below to take current image's position
+		await pb.collection('images').update(belowImage.id, {
+			order_position: currentPosition
+		});
 
-	// update the image below to take current image's position
-	const {error: updateBelowError} = await supabase
-		.from("images")
-		.update({order_position: currentPosition})
-		.eq("id", belowImage.id);
+		try {
+			// update current image to take the below image's position
+			await pb.collection('images').update(image.id, {
+				order_position: belowPosition
+			});
+		} catch (updateThisError) {
+			console.log("Move Down Error (second update): ", updateThisError);
+			// Rollback the first update
+			try {
+				await pb.collection('images').update(belowImage.id, {
+					order_position: belowPosition
+				});
+			} catch (rollbackError) {
+				console.error("Rollback Error: ", rollbackError);
+			}
+			return false;
+		}
 
-	if (updateBelowError) {
-		console.log("Move Down Error (first update): ", updateBelowError);
+		// successfully moved image
+		revalidatePath("/slideshow");
+		return true;
+	} catch (error) {
+		console.log("Move Down Error: ", error);
 		return false;
 	}
-
-	// update current image to take the below image's position
-	const {error: updateThisError} = await supabase
-		.from("images")
-		.update({order_position: belowPosition})
-		.eq("id", image.id);
-	
-	if (updateThisError) {
-		console.log("Move Down Error (second update): ", updateThisError);
-		// Rollback the first update
-		await supabase
-			.from("images")
-			.update({order_position: belowPosition})
-			.eq("id", belowImage.id);
-		return false;
-	}
-
-	// successfully moved image
-	revalidatePath("/slideshow");
-	return true;
-
-
 }
 
 export default moveDownImage;

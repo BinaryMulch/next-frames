@@ -1,43 +1,30 @@
 "use server";
 
-import {createClient} from "@/utils/supabase/server";
+import {createClient, getAuthUser} from "@/utils/pocketbase/server";
 
 async function getAllImages(requireAuth = true) {
-
-	const supabase = await createClient();
+	const pb = await createClient();
 
 	// validate user session (optional)
 	if (requireAuth) {
-		const {data: authData, error: authError} = await supabase.auth.getUser();
-
-		if (authError || !authData.user) {
-			console.error("Auth Error: ", authError);
+		const user = await getAuthUser();
+		if (!user) {
+			console.error("Auth Error: No authenticated user");
 			return [];
 		}
 	}
 
-	// get all images
-	const {data, error} = await supabase
-		.from("images")
-		.select();
+	try {
+		// get all images
+		const records = await pb.collection('images').getFullList({
+			sort: '+order_position',
+		});
 
-	if (error) {
+		return records;
+	} catch (error) {
 		console.error("Database Error: ", error);
 		return [];
 	}
-
-	if (!data) {
-		return [];
-	}
-
-	
-	// sort images by order position
-	data.sort(
-		(a, b) => (a.order_position - b.order_position)
-	)
-
-	return data	
-
 }
 
 export default getAllImages;

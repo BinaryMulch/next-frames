@@ -1,71 +1,36 @@
 "use server";
 
-import {createClient} from "@/utils/supabase/server";
+import {createClient, getAuthUser} from "@/utils/pocketbase/server";
 import { revalidatePath } from "next/cache";
 import getAllImages from "./getAllImages";
 
-export default async function deleteImage(id, storageId) {
-
-	const supabase = await createClient();
+export default async function deleteImage(id) {
+	const pb = await createClient();
 
 	// validate user session
-	const {data: authData, error: authError} = await supabase.auth.getUser();
-
-	if (authError || !authData.user) {
-		console.error("Auth Error: ", authError);
+	const user = await getAuthUser();
+	if (!user) {
+		console.error("Auth Error: No authenticated user");
 		return false;
 	}
 
-	// delete image from storage
-	const storageSuccess = await deleteFromStorage(supabase, storageId);
-	if (!storageSuccess) return false;
+	try {
+		// delete image record (file will be auto-deleted by PocketBase)
+		await pb.collection('images').delete(id);
 
-	// delete image from database
-	const databaseSuccess = await deleteFromDatabase(supabase, id);
-	if (!databaseSuccess) return false;
+		// compact order positions to remove gaps
+		await compactOrderPositions(pb);
 
-	// compact order positions to remove gaps
-	await compactOrderPositions(supabase);
-
-	// successfully delete image
-	revalidatePath("/slideshow");
-	return true;
-
-}
-
-export async function deleteFromStorage(supabase, storageId) {
-
-	const {error} = await supabase
-		.storage
-		.from("images")
-		.remove([storageId]);
-	
-	if (error) {
-		console.error("Storage Error: ", error);
+		// successfully delete image
+		revalidatePath("/slideshow");
+		return true;
+	} catch (error) {
+		console.error("Delete Error: ", error);
 		return false;
 	}
-
-	return true;
-
 }
 
-export async function deleteFromDatabase(supabase, id) {
-
-	const {error} = await supabase
-		.from("images")
-		.delete()
-		.eq("id", id);
-
-	if (error) {
-		console.error("Database Error: ", error);
-		return false;
-	}
-
-	return true;
-
-}
-
-async function compactOrderPositions(supabase) {
+async function compactOrderPositions(pb) {
 	try {
 		// Get all remaining images in order
 		const images = await getAllImages();
@@ -74,10 +39,9 @@ async function compactOrderPositions(supabase) {
 		for (let i = 0; i < images.length; i++) {
 			const newPosition = i + 1;
 			if (images[i].order_position !== newPosition) {
-				await supabase
-					.from("images")
-					.update({ order_position: newPosition })
-					.eq("id", images[i].id);
+				await pb.collection('images').update(images[i].id, { 
+					order_position: newPosition 
+				});
 			}
 		}
 	} catch (error) {

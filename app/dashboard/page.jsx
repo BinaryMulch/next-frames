@@ -1,5 +1,5 @@
 import {redirect} from "next/navigation";
-import {createClient} from "@/utils/supabase/server";
+import {getAuthUser} from "@/utils/pocketbase/server";
 
 import Navbar from "@/components/navbar";
 import {ImagesProvider} from "../context/imagesContext";
@@ -8,11 +8,9 @@ import ImageCardList from "@/components/imageCardList";
 import ImagePreview from "@/components/imagePreview";
 
 const DashboardPage = async () => {
-	const supabase = await createClient();
-
 	// validate user session
-	const {data: authData, error: authError} = await supabase.auth.getUser();
-	if (authError || !authData.user) redirect("/login");
+	const user = await getAuthUser();
+	if (!user) redirect("/login");
 
 	return (
 

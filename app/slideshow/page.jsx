@@ -11,9 +11,12 @@ const SlideshowPage = () => {
 		try {
 			const imageData = await getAllImages(false); // Public access for slideshow
 			setImages(
-				imageData.map(
-					(image) => (image.url)
-				)
+				imageData.map((image) => {
+					if (image.image) {
+						return `${process.env.NEXT_PUBLIC_POCKETBASE_URL || 'http://127.0.0.1:8090'}/api/files/${image.collectionId}/${image.id}/${image.image}`;
+					}
+					return '';
+				}).filter(url => url !== '')
 			);
 			console.log("Images fetched successfully")
 		}
