@@ -6,6 +6,7 @@ import {ImagesProvider} from "../context/imagesContext";
 import ImageUploadCard from "@/components/ImageUploadCard";
 import ImageCardList from "@/components/imageCardList";
 import ImagePreview from "@/components/imagePreview";
+import ActiveUserBanner from "@/components/activeUserBanner";
 
 const DashboardPage = async () => {
 	const supabase = await createClient();
@@ -21,6 +22,7 @@ const DashboardPage = async () => {
 		<ImagesProvider>
 			<section className="h-[calc(100vh-64px)] bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
 				<div className="h-full flex flex-col px-4 py-6">
+					<ActiveUserBanner />
 					<div className="mb-6 flex-shrink-0">
 						<h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
 						<p className="text-gray-600">Manage your slideshow images and preview them in real-time</p>
