@@ -88,30 +88,33 @@ const ImageUpload = () => {
 
 	return (
 
-		<div onDragOver={handleDragOver} onDrop={handleDrop}  className="flex items-center justify-center w-full p-4">
-			<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-primary-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-primary-50">
-				<div className="flex flex-col items-center justify-center py-5 pb-6">
+		<div className="p-4 border-b border-gray-200">
+			<h3 className="text-sm font-semibold text-gray-700 mb-3">Upload Images</h3>
+			<div onDragOver={handleDragOver} onDrop={handleDrop} className="flex items-center justify-center w-full">
+				<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-indigo-400 transition-colors duration-200">
+					<div className="flex flex-col items-center justify-center py-5 pb-6">
 
-					{
-						isLoading
-						? (
-							<div className="flex justify-center">
-								<ClipLoader size={64} color="#6366f1"/>
-							</div>
-						)
-						: (
-							<>
-								<FaCloudUploadAlt className="text-3xl mb-1" />
-								<p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop.</p>
-								<p className="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 5MB)</p>
-							</>
-						)
-					}
+						{
+							isLoading
+							? (
+								<div className="flex flex-col items-center">
+									<ClipLoader size={32} color="#6366f1"/>
+									<p className="text-xs text-gray-600 mt-2">Uploading...</p>
+								</div>
+							)
+							: (
+								<>
+									<FaCloudUploadAlt className="text-2xl text-gray-400 mb-2" />
+									<p className="mb-1 text-sm text-gray-600"><span className="font-semibold text-indigo-600">Click to upload</span> or drag and drop</p>
+									<p className="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 5MB)</p>
+								</>
+							)
+						}
 
-
-				</div>
-				<input onInput={onImageUpload} id="dropzone-file" name="dropzone-file" type="file" multiple accept="image/jpeg,image/jpg,image/png,image/gif,image/svg+xml" className="hidden" />
-			</label>
+					</div>
+					<input onInput={onImageUpload} id="dropzone-file" name="dropzone-file" type="file" multiple accept="image/jpeg,image/jpg,image/png,image/gif,image/svg+xml" className="hidden" />
+				</label>
+			</div>
 		</div>
 
 	);
