@@ -23,7 +23,7 @@ async function moveDownImage(image) {
 	const {data, error: getAboveError} = await supabase
 		.from("images")
 		.select()
-		.eq("order_position", image.order_position - 1);
+		.eq("order_position", image.order_position + 1);
 	if (getAboveError) return false;
 
 	const aboveImage = data[0];
@@ -37,7 +37,7 @@ async function moveDownImage(image) {
 	// update this image
 	const {error: updateThisError} = await supabase
 		.from("images")
-		.update({order_position: image.order_position - 1})
+		.update({order_position: image.order_position + 1})
 		.eq("id", image.id);
 	
 	if (updateAboveError || updateThisError) {

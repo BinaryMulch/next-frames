@@ -27,7 +27,7 @@ export async function uploadImage(files) {
 		// add image to database
 		const databaseSuccess = await insertImageToDatabase(supabase, file, publicUrl, storageId);
 		if (!databaseSuccess) {
-			deleteFromStorage(supabase, file.storageId);
+			deleteFromStorage(supabase, storageId);
 			return false;
 		}
 
@@ -56,7 +56,7 @@ async function uploadImageToStorage(supabase, storageId, file) {
 		.upload(storageId, file);
 
 	if (error) {
-		console.error("Storage Error: ", storageError);
+		console.error("Storage Error: ", error);
 		return false;
 	}
 
