@@ -19,29 +19,34 @@ async function moveUpImage(image) {
 	const images = await getAllImages();
 	if (image.order_position == images[0].order_position) return false;
 
-	// get below image
-	const {data, error: getBelowError} = await supabase
+	// get the image above (lower order_position)
+	const {data, error: getAboveError} = await supabase
 		.from("images")
 		.select()
 		.eq("order_position", image.order_position - 1);
-	if (getBelowError) return false;
+	if (getAboveError) return false;
 
-	const belowImage = data[0];
+	const aboveImage = data[0];
+	if (!aboveImage) return false; // No image found to swap with
 
-	// update below image
-	const {error: updateBelowError} = await supabase
+	// swap order positions
+	const currentPosition = image.order_position;
+	const abovePosition = aboveImage.order_position;
+
+	// update the image above to take current image's position
+	const {error: updateAboveError} = await supabase
 		.from("images")
-		.update({order_position: image.order_position})
-		.eq("id", belowImage.id);
+		.update({order_position: currentPosition})
+		.eq("id", aboveImage.id);
 
-	// update this image
+	// update current image to take the above image's position
 	const {error: updateThisError} = await supabase
 		.from("images")
-		.update({order_position: image.order_position - 1})
+		.update({order_position: abovePosition})
 		.eq("id", image.id);
 	
-	if (updateBelowError || updateThisError) {
-		console.log("Move Up Error: ", updateBelowError);
+	if (updateAboveError || updateThisError) {
+		console.log("Move Up Error: ", updateAboveError);
 		console.log("Move Up Error: ", updateThisError);
 		return false;
 	}
