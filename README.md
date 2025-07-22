@@ -1,57 +1,59 @@
-# 🖼️ Next Frames
+# Next Frames
 
-A modern, high-performance image slideshow management system built with Next.js 15 and Supabase. Create, manage, and display beautiful image slideshows with real-time updates and optimistic UI interactions.
+A modern, enterprise-grade image slideshow management system built with Next.js 15 and Supabase. Create, manage, and display professional image slideshows with real-time updates, theme customization, and advanced UI optimization.
 
 ![Next.js](https://img.shields.io/badge/Next.js-15.3.3-black?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)
 ![Supabase](https://img.shields.io/badge/Supabase-Backend-green?style=flat-square&logo=supabase)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=flat-square&logo=tailwindcss)
+![Version](https://img.shields.io/badge/Version-0.3.0-brightgreen?style=flat-square)
 
-## ✨ Features
+## Features
 
-### 🎯 Core Functionality
-- **🔐 Secure Authentication** - Supabase-powered user authentication with protected routes
-- **📱 Responsive Dashboard** - Modern, beautiful interface for image management
-- **🖼️ Smart Image Upload** - Drag & drop or click to upload with file validation
-- **🎢 Dynamic Slideshow** - Auto-cycling full-screen slideshow with smooth transitions
-- **👀 Real-time Preview** - Instant image preview with loading states
-- **🔄 Drag to Reorder** - Intuitive image reordering with optimistic updates
+### Core Functionality
+- **Enterprise Authentication**: Supabase-powered secure authentication with protected routes
+- **Responsive Dashboard**: Professional interface with adaptive design for all devices
+- **Advanced Image Management**: Drag & drop upload with comprehensive file validation
+- **Dynamic Slideshow**: Auto-cycling full-screen display with smooth transitions
+- **Real-time Preview**: Instant image preview with optimized loading states
+- **Intelligent Reordering**: Drag-to-reorder functionality with optimistic updates
 
-### ⚡ Performance & UX
-- **🚀 Optimistic Updates** - Instant UI feedback for all operations
-- **🔒 Multi-user Conflict Prevention** - Smart locking system prevents data conflicts
-- **📊 Memoized Components** - Optimized React components for smooth performance
-- **🏃‍♂️ Queue-based Operations** - Sequential server actions prevent race conditions
-- **🎨 Beautiful UI** - Polished interface with hover effects and animations
+### User Experience
+- **Light/Dark Theme Toggle**: Professional theme switching with localStorage persistence
+- **Optimistic Updates**: Instant UI feedback for all user operations
+- **Multi-user Conflict Prevention**: Advanced locking system prevents concurrent editing conflicts
+- **Performance Optimization**: Memoized components and efficient rendering patterns
+- **Queue-based Operations**: Sequential server actions prevent race conditions
+- **Polished Interface**: Professional design with smooth animations and hover effects
 
-### 🛡️ Technical Excellence
-- **📦 Modern Stack** - Next.js 15 with React 19 and App Router
-- **🎯 TypeScript Ready** - Full type safety support
-- **♿ Accessible** - WCAG compliant with proper ARIA labels
-- **📱 Mobile First** - Responsive design that works on all devices
-- **🔧 Performance Optimized** - Lazy loading, memoization, and efficient re-renders
+### Technical Excellence
+- **Modern Architecture**: Next.js 15 with React 19 and App Router pattern
+- **Type-Safe Development**: Full TypeScript compatibility and type safety
+- **Accessibility Compliance**: WCAG 2.1 compliant with proper ARIA implementation
+- **Mobile-First Design**: Responsive layouts optimized for all screen sizes
+- **Production Ready**: Enterprise-grade performance optimizations and error handling
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 18.0.0 or higher
 - A Supabase project with storage bucket configured
-- Modern browser with JavaScript enabled
+- Modern browser with ES2020 support
 
 ### Installation
 
-1. **Clone the repository**
+1. **Clone the Repository**
    ```bash
    git clone https://github.com/yourusername/next-frames.git
    cd next-frames
    ```
 
-2. **Install dependencies**
+2. **Install Dependencies**
    ```bash
    npm install
    ```
 
-3. **Environment Setup**
+3. **Environment Configuration**
    
    Create a `.env.local` file in the root directory:
    ```bash
@@ -59,9 +61,9 @@ A modern, high-performance image slideshow management system built with Next.js 
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
 
-4. **Database Setup**
+4. **Database Schema Setup**
    
-   Create the following table in your Supabase database:
+   Execute the following SQL in your Supabase SQL editor:
    ```sql
    CREATE TABLE images (
      id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -71,142 +73,199 @@ A modern, high-performance image slideshow management system built with Next.js 
      order_position integer NOT NULL,
      created_at timestamptz DEFAULT now()
    );
+   
+   -- Create indexes for optimal performance
+   CREATE INDEX idx_images_order_position ON images(order_position);
+   CREATE INDEX idx_images_created_at ON images(created_at);
    ```
 
-5. **Storage Setup**
+5. **Storage Configuration**
    
-   Create a storage bucket named `images` in your Supabase dashboard with public access.
+   Create a storage bucket named `images` in your Supabase dashboard:
+   - Set bucket to **public** access
+   - Configure upload limits as needed
+   - Enable file type restrictions (JPG, PNG, GIF, SVG)
 
-6. **Start Development Server**
+6. **Launch Development Environment**
    ```bash
    npm run dev
    ```
 
-   Open [http://localhost:3000](http://localhost:3000) to see the application.
+   Navigate to [http://localhost:3000](http://localhost:3000) to access the application.
 
-## 📖 Usage
+## User Guide
 
-### Dashboard (`/dashboard`)
-- **Upload Images**: Drag & drop or click to select multiple images
-- **Reorder Images**: Use up/down arrows to change slideshow sequence  
-- **Preview Images**: Click preview button to see full-size image
-- **Delete Images**: Remove unwanted images from your slideshow
-- **Real-time Updates**: Changes are reflected immediately across all views
+### Dashboard Interface (`/dashboard`)
+- **Upload Management**: Multi-file drag & drop upload with real-time progress
+- **Image Reordering**: Intuitive up/down controls for slideshow sequencing
+- **Preview System**: Full-size image preview with loading optimization
+- **Deletion Control**: Safe image removal with confirmation prompts
+- **Theme Customization**: Light/dark mode toggle with system preference detection
+- **Real-time Synchronization**: Instant updates across all connected sessions
 
-### Slideshow (`/slideshow`)
-- **Auto-cycling**: Images transition every 5 seconds automatically
-- **Full-screen Display**: Optimized for presentation and digital signage
-- **Smooth Transitions**: CSS-powered slide animations
-- **Auto-refresh**: Checks for new images every 5 minutes
+### Slideshow Display (`/slideshow`)
+- **Automated Cycling**: Configurable image transitions (default: 10 seconds)
+- **Full-screen Presentation**: Optimized for digital signage and presentations
+- **Smooth Animations**: Hardware-accelerated CSS transitions
+- **Dynamic Updates**: Automatic content refresh every 5 minutes
+- **Responsive Scaling**: Adaptive image sizing for various display ratios
 
-## 🏗️ Project Structure
+## Architecture Overview
 
 ```
 next-frames/
 ├── app/
-│   ├── actions/           # Server Actions for CRUD operations
-│   ├── context/          # React Context for state management
-│   ├── dashboard/        # Protected dashboard pages
-│   ├── login/           # Authentication pages  
+│   ├── actions/           # Server Actions for database operations
+│   ├── context/          # React Context providers (Images, Theme)
+│   ├── dashboard/        # Protected dashboard interface
+│   ├── login/           # Authentication interface
 │   └── slideshow/       # Public slideshow display
-├── components/          # Reusable React components
-├── utils/              # Utility functions and Supabase clients
-└── middleware.js       # Next.js middleware for route protection
+├── components/          # Modular React components
+├── utils/              # Utility functions and Supabase configuration
+└── middleware.js       # Route protection and authentication
 ```
 
-## 🛠️ Development
+### Key Design Patterns
+- **Server Actions**: Modern data fetching with automatic revalidation
+- **Context Architecture**: Centralized state management with optimistic updates
+- **Component Composition**: Reusable, memoized components for optimal performance
+- **Theme System**: Centralized theme management with localStorage persistence
 
-### Available Scripts
+## Development Workflow
+
+### Available Commands
 
 ```bash
-npm run dev      # Start development server
-npm run build    # Create production build
+npm run dev      # Start development server (localhost:3000)
+npm run build    # Generate production build with optimizations
 npm run start    # Start production server
-npm run lint     # Run ESLint
+npm run lint     # Execute ESLint code quality checks
 ```
 
-### Key Technologies
+### Technology Stack
 
-- **Framework**: Next.js 15 with App Router
-- **Frontend**: React 19, TailwindCSS
-- **Backend**: Supabase (Auth, Database, Storage)
-- **State Management**: React Context with optimistic updates
-- **Performance**: React.memo, useMemo, useCallback optimization
-- **Icons**: React Icons (Font Awesome)
-- **Notifications**: React Toastify
+- **Framework**: Next.js 15.3.3 with App Router architecture
+- **Frontend**: React 19.0.0, TailwindCSS 3.4.1
+- **Backend Services**: Supabase (Authentication, Database, Storage)
+- **State Management**: React Context with optimistic update patterns
+- **Performance**: React.memo, useMemo, useCallback optimization strategies
+- **UI Components**: React Icons, Headless UI
+- **Notifications**: React Toastify with custom styling
 
-## 🔧 Configuration
+## Configuration Options
 
-### Image Upload Limits
-- **Max file size**: 5MB per image
-- **Max total upload**: 50MB per batch
-- **Supported formats**: JPG, PNG, GIF, SVG
+### Upload Specifications
+- **Maximum file size**: 5MB per individual image
+- **Maximum batch size**: 50MB per upload session
+- **Supported formats**: JPEG, PNG, GIF, SVG
+- **Processing**: Automatic optimization and validation
 
-### Auto-refresh Intervals
-- **Slideshow**: Checks for new images every 5 minutes
-- **Dashboard**: Real-time updates via optimistic UI
-- **User activity**: Heartbeat every 5 seconds
+### System Intervals
+- **Slideshow transitions**: 10 seconds between images
+- **Content refresh**: 5-minute intervals for new content detection
+- **User activity monitoring**: 5-second heartbeat for conflict prevention
+- **Session management**: 15-second timeout for inactive sessions
 
-## 🚀 Deployment
+### Theme System
+- **Storage**: Browser localStorage with fallback to system preferences
+- **Modes**: Professional light and dark themes
+- **Persistence**: Cross-session theme retention
+- **Transitions**: Smooth 200ms duration animations
 
-### Vercel (Recommended)
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy automatically
+## Deployment Guide
 
-### Docker
+### Vercel Deployment (Recommended)
+1. Connect your GitHub repository to Vercel
+2. Configure environment variables in Vercel dashboard
+3. Enable automatic deployments on push
+4. Monitor performance with Vercel Analytics
+
+### Docker Containerization
 ```dockerfile
-FROM node:18-alpine
+FROM node:18-alpine AS base
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci --only=production && npm cache clean --force
+
+FROM base AS build
 COPY . .
 RUN npm run build
+
+FROM base AS runtime
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/public ./public
 EXPOSE 3000
 CMD ["npm", "start"]
 ```
 
-## 🤝 Contributing
+### Environment Variables
+```bash
+# Required
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+# Optional
+NEXT_PUBLIC_APP_ENV=production
+NEXT_PUBLIC_ANALYTICS_ID=your_analytics_id
+```
 
-## 🐛 Known Issues & Limitations
+## Contributing Guidelines
 
-- **Multi-browser sessions**: Same user across different browsers may not detect conflicts
-- **Large images**: Very large images may cause slower loading times
-- **Concurrent uploads**: Multiple simultaneous uploads may conflict
+1. Fork the repository and create a feature branch
+2. Implement changes with appropriate test coverage
+3. Follow established code style and conventions
+4. Document new features and API changes
+5. Submit a pull request with detailed description
 
-## 📝 Changelog
+### Development Standards
+- Use TypeScript for type safety
+- Follow React best practices and hooks guidelines
+- Implement proper error handling and loading states
+- Write comprehensive commit messages
+- Test functionality across different browsers
 
-### v0.2.0
-- ✅ Added optimistic UI updates for move operations
-- ✅ Implemented multi-user conflict prevention
-- ✅ Enhanced UI with better loading states and animations
-- ✅ Performance optimizations with React.memo and useMemo
-- ✅ Improved image handling with Next.js Image component
+## Known Limitations
 
-### v0.1.0
-- ✅ Initial release with core functionality
-- ✅ Supabase authentication and storage integration
-- ✅ Basic dashboard and slideshow features
+- **Cross-browser sessions**: Multi-device conflict detection limited to localStorage scope
+- **Large file handling**: Images exceeding 5MB require manual optimization
+- **Concurrent operations**: Heavy simultaneous usage may require rate limiting
+- **Mobile upload**: Some mobile browsers have file selection limitations
 
-## 📄 License
+## Version History
 
-This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/) License.
+### v0.3.0 - Theme System Release
+- Implemented comprehensive light/dark theme system
+- Added theme toggle with localStorage persistence
+- Enhanced UI consistency across all components
+- Improved accessibility with better contrast ratios
+- Updated navigation and button visibility for dark mode
 
-## 🙋‍♂️ Support
+### v0.2.0 - Performance Enhancement
+- Introduced optimistic UI updates for improved responsiveness
+- Implemented multi-user conflict prevention system
+- Enhanced interface with professional loading states
+- Optimized performance with React memoization strategies
+- Improved image handling with Next.js Image component
 
-- **Documentation**: Check the [CLAUDE.md](./CLAUDE.md) file for development guidance
-- **Issues**: Report bugs or request features via GitHub Issues
-- **Discussions**: Join project discussions in GitHub Discussions
+### v0.1.0 - Initial Release
+- Core slideshow management functionality
+- Supabase authentication and storage integration
+- Basic dashboard and presentation interfaces
+
+## License
+
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/) License. Commercial usage requires explicit permission.
+
+## Additional Resources
+
+- **Technical Documentation**: Comprehensive development guidelines available in project documentation
+- **Issue Tracking**: Report bugs via GitHub Issues
+- **Feature Requests**: Submit enhancement proposals through GitHub Discussions
+- **Security**: Report security vulnerabilities privately via GitHub Security
 
 ---
 
 <div align="center">
-  <strong>Built with ❤️ using Next.js and Supabase</strong>
+  <strong>Professional slideshow management solution powered by modern web technologies</strong><br>
+  <em>Next.js 15 • React 19 • Supabase • TailwindCSS</em>
 </div>
