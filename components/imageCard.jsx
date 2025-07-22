@@ -13,8 +13,8 @@ const ImageCard = ({image}) => {
 				<p className="flex flex-grow text-gray-700">{image.name}</p>
 				<div className="pt-2">
 					<PreviewButton url={image.url} />
-					{/* <MoveUpButton image={image} /> */}
-					{/* <MoveDownButton image={image} /> */}
+					<MoveUpButton image={image} />
+					<MoveDownButton image={image} />
 					<DeleteButton id={image.id} storageId={image.storage_id} />
 				</div>
 

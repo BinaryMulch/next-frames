@@ -41,8 +41,8 @@ async function moveDownImage(image) {
 		.eq("id", image.id);
 	
 	if (updateAboveError || updateThisError) {
-		console.log("Move Up Error: ", updateAboveError);
-		console.log("Move Up Error: ", updateThisError);
+		console.log("Move Down Error: ", updateAboveError);
+		console.log("Move Down Error: ", updateThisError);
 		return false;
 	}
 

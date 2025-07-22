@@ -18,9 +18,11 @@ const DeleteButton = ({id, storageId}) => {
 		const success = await deleteImage(id, storageId);
 		if (!success) {
 			toast.error("File could not be deleted!");
+			setIsLoading(false);
 			return;
 		}
 		handleImageUpdate();
+		setIsLoading(false);
 		toast.success("File deleted!");
 	}
 

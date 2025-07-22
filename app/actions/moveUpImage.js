@@ -27,7 +27,6 @@ async function moveUpImage(image) {
 	if (getBelowError) return false;
 
 	const belowImage = data[0];
-	console.log(data)
 
 	// update below image
 	const {error: updateBelowError} = await supabase
