@@ -2,24 +2,33 @@
 
 import {createClient} from "@/utils/supabase/server";
 
-async function getAllImages() {
+async function getAllImages(requireAuth = true) {
 
 	const supabase = await createClient();
 
-	// validate user session
-	/*
-	const {data: authData, error: authError} = await supabase.auth.getUser();
+	// validate user session (optional)
+	if (requireAuth) {
+		const {data: authData, error: authError} = await supabase.auth.getUser();
 
-	if (authError || !authData.user) {
-		console.error("Auth Error: ", authError);
-		return null;
+		if (authError || !authData.user) {
+			console.error("Auth Error: ", authError);
+			return [];
+		}
 	}
-	*/
 
 	// get all images
-	const {data} = await supabase
+	const {data, error} = await supabase
 		.from("images")
 		.select();
+
+	if (error) {
+		console.error("Database Error: ", error);
+		return [];
+	}
+
+	if (!data) {
+		return [];
+	}
 
 	
 	// sort images by order position
