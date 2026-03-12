@@ -5,7 +5,8 @@ import getAllImages from "../actions/getAllImages";
 import Carousel from "@/components/carousel";
 
 const SlideshowPage = () => {
-	const [images, setImages] = useState();
+	const [images, setImages] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
 
 	async function fetchImages() {
 		try {
@@ -19,6 +20,8 @@ const SlideshowPage = () => {
 		}
 		catch (error) {
 			console.error("Error fetching images: ", error);
+		} finally {
+			setIsLoading(false);
 		}
 	}
 
@@ -34,15 +37,17 @@ const SlideshowPage = () => {
 	return (
 
 		<>
-			{
-				!images || images.length === 0
-				? (
-					<></>
-				)
-				: (
-					<Carousel images={images}/>
-				)
-			}
+			{isLoading ? (
+				<div className="h-screen w-screen flex items-center justify-center bg-black">
+					<p className="text-gray-400 text-lg">Loading slideshow...</p>
+				</div>
+			) : !images || images.length === 0 ? (
+				<div className="h-screen w-screen flex items-center justify-center bg-black">
+					<p className="text-gray-400 text-lg">No images to display</p>
+				</div>
+			) : (
+				<Carousel images={images}/>
+			)}
 		</>
 
 	);

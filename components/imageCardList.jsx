@@ -14,8 +14,13 @@ const ImageCardList = memo(() => {
 	useEffect(
 		() => {
 			async function fetchImages() {
-				await handleImageUpdate();
-				setIsLoading(false);
+				try {
+					await handleImageUpdate();
+				} catch (error) {
+					console.error("Error fetching images:", error);
+				} finally {
+					setIsLoading(false);
+				}
 			}
 			fetchImages();
 		},

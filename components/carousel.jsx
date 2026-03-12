@@ -8,7 +8,13 @@ const Carousel = ({images}) => {
 
 	useEffect(
 		() => {
-			if (!images || images.length === 0) return;
+			if (!images || images.length === 0) {
+				setCurrentIndex(0);
+				return;
+			}
+
+			// Clamp index if images were removed
+			setCurrentIndex(prev => prev >= images.length ? 0 : prev);
 
 			const interval = setInterval(
 				() => {
@@ -27,17 +33,6 @@ const Carousel = ({images}) => {
 		[images]
 	);
 
-	useEffect(
-		() => {
-			if (!images || images.length === 0) {
-				setCurrentIndex(0);
-				return;
-			}
-
-			setCurrentIndex(prev => prev >= images.length ? 0 : prev);
-		}, [images]
-	);
-
 	return (
 
 		<div className="cursor-none h-screen w-screen overflow-hidden relative bg-black">
@@ -46,7 +41,7 @@ const Carousel = ({images}) => {
 					{
 						images.map(
 							(image, index) => (
-								<div key={index} className="w-screen h-screen flex-shrink-0 relative">
+								<div key={image} className="w-screen h-screen flex-shrink-0 relative">
 									<Image
 										src={image}
 										fill

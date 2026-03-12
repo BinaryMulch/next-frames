@@ -3,6 +3,7 @@
 import {createContext, useContext, useState, useRef, useEffect, useMemo, useCallback} from "react";
 import {createClient} from "@/utils/pocketbase/client";
 
+import {toast} from "react-toastify";
 import getAllImages from "@/app/actions/getAllImages";
 
 export const ImagesContext = createContext();
@@ -178,20 +179,15 @@ export const ImagesProvider = ({children}) => {
 			if (direction === 'up' && currentIndex > 0) {
 				[imagesCopy[currentIndex - 1], imagesCopy[currentIndex]] =
 				[imagesCopy[currentIndex], imagesCopy[currentIndex - 1]];
-
-				imagesCopy.forEach((img, index) => {
-					img.order_position = index + 1;
-				});
 			} else if (direction === 'down' && currentIndex < imagesCopy.length - 1) {
 				[imagesCopy[currentIndex], imagesCopy[currentIndex + 1]] =
 				[imagesCopy[currentIndex + 1], imagesCopy[currentIndex]];
-
-				imagesCopy.forEach((img, index) => {
-					img.order_position = index + 1;
-				});
 			}
 
-			return imagesCopy;
+			return imagesCopy.map((img, index) => ({
+				...img,
+				order_position: index + 1,
+			}));
 		});
 
 		operationQueue.current.push({
@@ -228,6 +224,7 @@ export const ImagesProvider = ({children}) => {
 							: img
 					);
 				});
+				toast.error("Failed to update image. Change has been reverted.");
 			}
 		}).catch(() => {
 			setImages(prevImages => {
@@ -237,6 +234,7 @@ export const ImagesProvider = ({children}) => {
 						: img
 				);
 			});
+			toast.error("Failed to update image. Change has been reverted.");
 		});
 	}, [isBlocked]);
 

@@ -32,11 +32,13 @@ async function moveUpImage(image) {
 		return false;
 	}
 
-	// get the image above (lower order_position)
+	// get the image above (next lower order_position)
 	let aboveImages;
 	try {
 		aboveImages = await pb.collection("images").getFullList({
-			filter: `order_position = ${currentPosition - 1}`,
+			filter: `order_position < ${currentPosition}`,
+			sort: "-order_position",
+			limit: 1,
 		});
 	} catch (error) {
 		console.error("MoveUp - Failed to get above image:", error);
