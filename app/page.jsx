@@ -1,15 +1,10 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
-
-import LoginPage from "@/app/login/page";
-import DashboardPage from "@/app/dashboard/page";
+import { createClient } from "@/utils/pocketbase/server";
 
 const HomePage = async () => {
-	const supabase = await createClient();
+	const pb = await createClient();
 
-	const { data, error } = await supabase.auth.getUser();
-
-	if (error || !data.user) {
+	if (!pb.authStore.isValid) {
 		redirect("/login");
 	}
 

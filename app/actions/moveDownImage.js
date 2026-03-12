@@ -1,92 +1,81 @@
 "use server";
 
-import {createClient} from "@/utils/supabase/server";
-import {revalidatePath} from "next/cache";
+import { createClient } from "@/utils/pocketbase/server";
+import { revalidatePath } from "next/cache";
 import getAllImages from "./getAllImages";
 
 async function moveDownImage(image) {
 
-	const supabase = await createClient();
+	const pb = await createClient();
 
 	// validate user session
-	const {data: authData, error: authError} = await supabase.auth.getUser();
-
-	if (authError || !authData.user) {
-		console.error("MoveDown Auth Error: ", authError);
+	if (!pb.authStore.isValid) {
+		console.error("MoveDown Auth Error: not authenticated");
 		return false;
 	}
 
-	// Get fresh data from database to avoid optimistic update conflicts
-	const {data: currentImageData, error: getCurrentError} = await supabase
-		.from("images")
-		.select()
-		.eq("id", image.id)
-		.single();
-
-	if (getCurrentError || !currentImageData) {
-		console.error("MoveDown - Failed to get current image:", getCurrentError);
+	// Get fresh data from database
+	let currentImageData;
+	try {
+		currentImageData = await pb.collection("images").getOne(image.id);
+	} catch (error) {
+		console.error("MoveDown - Failed to get current image:", error);
 		return false;
 	}
 
 	const currentPosition = currentImageData.order_position;
 
 	// check if out of range
-	const images = await getAllImages(true, true); // requireAuth=true, includesPaused=true
+	const images = await getAllImages(true, true);
 	if (currentPosition === images[images.length - 1].order_position) {
 		console.log("MoveDown - Already at bottom position");
 		return false;
 	}
 
 	// get the image below (higher order_position)
-	const {data, error: getBelowError} = await supabase
-		.from("images")
-		.select()
-		.eq("order_position", currentPosition + 1);
-	if (getBelowError) {
-		console.error("MoveDown - Failed to get below image:", getBelowError);
+	let belowImages;
+	try {
+		belowImages = await pb.collection("images").getFullList({
+			filter: `order_position = ${currentPosition + 1}`,
+		});
+	} catch (error) {
+		console.error("MoveDown - Failed to get below image:", error);
 		return false;
 	}
 
-	const belowImage = data[0];
+	const belowImage = belowImages[0];
 	if (!belowImage) {
 		console.error("MoveDown - No image found below position:", currentPosition + 1);
 		return false;
 	}
 
-	// swap order positions with rollback capability
+	// swap order positions
 	const belowPosition = belowImage.order_position;
 
-	// update the image below to take current image's position
-	const {error: updateBelowError} = await supabase
-		.from("images")
-		.update({order_position: currentPosition})
-		.eq("id", belowImage.id);
-
-	if (updateBelowError) {
-		console.log("Move Down Error (first update): ", updateBelowError);
+	try {
+		await pb.collection("images").update(belowImage.id, {
+			order_position: currentPosition,
+		});
+	} catch (error) {
+		console.log("Move Down Error (first update): ", error);
 		return false;
 	}
 
-	// update current image to take the below image's position
-	const {error: updateThisError} = await supabase
-		.from("images")
-		.update({order_position: belowPosition})
-		.eq("id", image.id);
-	
-	if (updateThisError) {
-		console.log("Move Down Error (second update): ", updateThisError);
+	try {
+		await pb.collection("images").update(image.id, {
+			order_position: belowPosition,
+		});
+	} catch (error) {
+		console.log("Move Down Error (second update): ", error);
 		// Rollback the first update
-		await supabase
-			.from("images")
-			.update({order_position: belowPosition})
-			.eq("id", belowImage.id);
+		await pb.collection("images").update(belowImage.id, {
+			order_position: belowPosition,
+		});
 		return false;
 	}
 
-	// successfully moved image
 	revalidatePath("/slideshow");
 	return true;
-
 
 }
 

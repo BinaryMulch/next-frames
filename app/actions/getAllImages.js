@@ -1,48 +1,44 @@
 "use server";
 
-import {createClient} from "@/utils/supabase/server";
+import { createClient } from "@/utils/pocketbase/server";
 
 async function getAllImages(requireAuth = true, includesPaused = true) {
 
-	const supabase = await createClient();
+	const pb = await createClient();
 
 	// validate user session (optional)
 	if (requireAuth) {
-		const {data: authData, error: authError} = await supabase.auth.getUser();
-
-		if (authError || !authData.user) {
-			console.error("Auth Error: ", authError);
+		if (!pb.authStore.isValid) {
+			console.error("Auth Error: not authenticated");
 			return [];
 		}
 	}
 
 	// get images with optional pause filtering
-	let query = supabase.from("images").select();
-	
-	// For slideshow, exclude paused images
-	if (!includesPaused) {
-		query = query.eq("is_paused", false);
-	}
+	try {
+		const options = {
+			sort: "order_position",
+		};
 
-	const {data, error} = await query;
+		if (!includesPaused) {
+			options.filter = "is_paused = false";
+		}
 
-	if (error) {
+		const records = await pb.collection("images").getFullList(options);
+
+		// Map records to include computed url
+		return records.map(record => ({
+			id: record.id,
+			name: record.name,
+			url: pb.files.getURL(record, record.file),
+			order_position: record.order_position,
+			is_paused: record.is_paused,
+		}));
+
+	} catch (error) {
 		console.error("Database Error: ", error);
 		return [];
 	}
-
-	if (!data) {
-		return [];
-	}
-
-	
-	// sort images by order position
-	data.sort(
-		(a, b) => (a.order_position - b.order_position)
-	)
-
-	return data	
-
 }
 
 export default getAllImages;

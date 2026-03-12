@@ -1,25 +1,36 @@
 "use server";
 
-import { revalidatePath } from "next/cache";;
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
+import { createClient } from "@/utils/pocketbase/server";
 
 export async function login(formData) {
 
-	const supabase = await createClient();
+	const pb = await createClient();
 
-	const data = {
-		email: formData.get("email"),
-		password: formData.get("password")
-	}
+	const email = formData.get("email");
+	const password = formData.get("password");
 
-	const { error } = await supabase.auth.signInWithPassword(data);
-
-	if (error) {
+	try {
+		await pb.collection("users").authWithPassword(email, password);
+	} catch (error) {
 		return {
-			error: error.message
+			error: error.message || "Invalid email or password"
 		}
 	}
+
+	// Set auth cookie
+	const cookieStore = await cookies();
+	const exportedCookie = pb.authStore.exportToCookie({ httpOnly: false });
+	const cookieParts = exportedCookie.split(";")[0];
+	const cookieValue = cookieParts.split("=").slice(1).join("=");
+	cookieStore.set("pb_auth", cookieValue, {
+		path: "/",
+		sameSite: "lax",
+		secure: false,
+		httpOnly: false,
+	});
 
 	revalidatePath("/", "layout");
 	redirect("/dashboard");

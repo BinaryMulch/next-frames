@@ -3,7 +3,7 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from '@/utils/pocketbase/client';
 import { useRouter } from 'next/navigation';
 import ThemeToggle from './themeToggle';
 
@@ -11,8 +11,9 @@ export default function Navbar() {
 	const router = useRouter();
 
 	const handleSignOut = async () => {
-		const supabase = createClient();
-		await supabase.auth.signOut();
+		const pb = createClient();
+		pb.authStore.clear();
+		document.cookie = 'pb_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 		router.push('/login');
 	}
 

@@ -1,7 +1,7 @@
 "use client";
 
 import {createContext, useContext, useState, useRef, useEffect, useMemo, useCallback} from "react";
-import {createClient} from "@/utils/supabase/client";
+import {createClient} from "@/utils/pocketbase/client";
 
 import getAllImages from "@/app/actions/getAllImages";
 
@@ -41,11 +41,11 @@ export const ImagesProvider = ({children}) => {
 		let checkInterval;
 		
 		const initializeUser = async () => {
-			const supabase = createClient();
-			const { data: { user } } = await supabase.auth.getUser();
-			if (user && mounted) {
-				setCurrentUser(user.id);
-				startHeartbeat(user.id);
+			const pb = createClient();
+			const userId = pb.authStore.record?.id;
+			if (userId && mounted) {
+				setCurrentUser(userId);
+				startHeartbeat(userId);
 				
 				// Periodically check for active user changes (reduced frequency)
 				checkInterval = setInterval(checkForActiveUser, 10000);

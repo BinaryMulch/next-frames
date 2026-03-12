@@ -1,33 +1,29 @@
 "use server";
 
-import {createClient} from "@/utils/supabase/server";
-import {revalidatePath} from "next/cache";
+import { createClient } from "@/utils/pocketbase/server";
+import { revalidatePath } from "next/cache";
 
 async function toggleImagePause(imageId, currentPauseState) {
-	const supabase = await createClient();
+	const pb = await createClient();
 
 	// Validate user session
-	const {data: authData, error: authError} = await supabase.auth.getUser();
-	
-	if (authError || !authData.user) {
-		console.error("Auth Error: ", authError);
+	if (!pb.authStore.isValid) {
+		console.error("Auth Error: not authenticated");
 		return false;
 	}
 
 	// Toggle the pause state
 	const newPauseState = !currentPauseState;
-	
-	const {error: updateError} = await supabase
-		.from("images")
-		.update({is_paused: newPauseState})
-		.eq("id", imageId);
 
-	if (updateError) {
-		console.error("Toggle pause error: ", updateError);
+	try {
+		await pb.collection("images").update(imageId, {
+			is_paused: newPauseState,
+		});
+	} catch (error) {
+		console.error("Toggle pause error: ", error);
 		return false;
 	}
 
-	// Revalidate paths to update slideshow
 	revalidatePath("/slideshow");
 	return true;
 }

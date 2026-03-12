@@ -54,7 +54,7 @@ const ImageCard = memo(({image}) => {
 						<MoveDownButton image={image} />
 					</div>
 					<div className="mx-1 w-px h-6 bg-gray-300 dark:bg-gray-500"></div>
-					<DeleteButton id={image.id} storageId={image.storage_id} />
+					<DeleteButton id={image.id} />
 				</div>
 
 			</div>

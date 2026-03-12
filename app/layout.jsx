@@ -6,8 +6,8 @@ import {ThemeProvider} from "./context/themeContext";
 
 export const metadata = {
 	title: "Next Frames - Professional Slideshow Management",
-	description: "Enterprise-grade image slideshow management system with real-time updates, theme customization, and advanced UI optimization. Built with Next.js 15 and Supabase.",
-	keywords: "slideshow, image management, Next.js, React, Supabase, dashboard, presentation",
+	description: "Enterprise-grade image slideshow management system with real-time updates, theme customization, and advanced UI optimization. Built with Next.js 15 and PocketBase.",
+	keywords: "slideshow, image management, Next.js, React, PocketBase, dashboard, presentation",
 	version: "0.3.0"
 }
 
