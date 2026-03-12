@@ -24,7 +24,7 @@ const Carousel = ({images}) => {
 
 			return () => clearInterval(interval);
 		},
-		[images, images.length]
+		[images]
 	);
 
 	useEffect(
@@ -34,10 +34,8 @@ const Carousel = ({images}) => {
 				return;
 			}
 
-			if (currentIndex >= images.length) {
-				setCurrentIndex(0);
-			}
-		}, [images, images.length, currentIndex]
+			setCurrentIndex(prev => prev >= images.length ? 0 : prev);
+		}, [images]
 	);
 
 	return (

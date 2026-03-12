@@ -68,13 +68,18 @@ async function moveUpImage(image) {
 	} catch (error) {
 		console.log("Move Up Error (second update): ", error);
 		// Rollback the first update
-		await pb.collection("images").update(aboveImage.id, {
-			order_position: abovePosition,
-		});
+		try {
+			await pb.collection("images").update(aboveImage.id, {
+				order_position: abovePosition,
+			});
+		} catch (rollbackError) {
+			console.error("Move Up Rollback Error: ", rollbackError);
+		}
 		return false;
 	}
 
 	revalidatePath("/slideshow");
+	revalidatePath("/dashboard");
 	return true;
 
 }

@@ -43,11 +43,13 @@ const ImageUpload = () => {
 		}
 
 		setIsLoading(true);
-		const success = await uploadImage(files);
+		const result = await uploadImage(files);
 		handleImageUpdate();
 		setIsLoading(false);
-		if (success) {
+		if (result.success && result.failed === 0) {
 			toast.success("File uploaded!");
+		} else if (result.success && result.failed > 0) {
+			toast.warn(`Uploaded ${result.uploaded} of ${result.uploaded + result.failed} files.`);
 		} else {
 			toast.error("Upload failed!");
 		}
@@ -76,11 +78,13 @@ const ImageUpload = () => {
 		}
 		
 		setIsLoading(true);
-		const success = await uploadImage(files);
+		const result = await uploadImage(files);
 		handleImageUpdate();
 		setIsLoading(false);
-		if (success) {
+		if (result.success && result.failed === 0) {
 			toast.success("File uploaded!");
+		} else if (result.success && result.failed > 0) {
+			toast.warn(`Uploaded ${result.uploaded} of ${result.uploaded + result.failed} files.`);
 		} else {
 			toast.error("Upload failed!");
 		}

@@ -27,6 +27,7 @@ export default async function deleteImage(id) {
 
 	// successfully deleted image
 	revalidatePath("/slideshow");
+	revalidatePath("/dashboard");
 	return true;
 
 }

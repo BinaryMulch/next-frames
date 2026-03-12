@@ -32,7 +32,8 @@ export async function updateSession(request) {
 		response.cookies.set("pb_auth", cookieValue, {
 			path: "/",
 			sameSite: "lax",
-			secure: false,
+			secure: process.env.NODE_ENV === "production",
+			// httpOnly must be false — client-side PocketBase SDK reads auth from document.cookie
 			httpOnly: false,
 		});
 	} catch (_) {

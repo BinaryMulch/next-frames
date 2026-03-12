@@ -34,18 +34,15 @@ export async function uploadImage(files) {
 			createdRecordIds.push(record.id);
 
 		} catch (error) {
-			console.error("Upload Error: ", error);
-			// Clean up previously created records
-			for (const id of createdRecordIds) {
-				try {
-					await pb.collection("images").delete(id);
-				} catch (cleanupError) {
-					console.error("Cleanup Error: ", cleanupError);
-				}
-			}
-			return false;
+			console.error(`Upload Error for file ${file.name}: `, error);
+			// Stop uploading remaining files but keep successfully uploaded ones
+			return {
+				success: createdRecordIds.length > 0,
+				uploaded: createdRecordIds.length,
+				failed: files.length - createdRecordIds.length,
+			};
 		}
 	}
 
-	return true;
+	return { success: true, uploaded: createdRecordIds.length, failed: 0 };
 }

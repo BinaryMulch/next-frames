@@ -68,13 +68,18 @@ async function moveDownImage(image) {
 	} catch (error) {
 		console.log("Move Down Error (second update): ", error);
 		// Rollback the first update
-		await pb.collection("images").update(belowImage.id, {
-			order_position: belowPosition,
-		});
+		try {
+			await pb.collection("images").update(belowImage.id, {
+				order_position: belowPosition,
+			});
+		} catch (rollbackError) {
+			console.error("Move Down Rollback Error: ", rollbackError);
+		}
 		return false;
 	}
 
 	revalidatePath("/slideshow");
+	revalidatePath("/dashboard");
 	return true;
 
 }

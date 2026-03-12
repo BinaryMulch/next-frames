@@ -152,6 +152,8 @@ export const ImagesProvider = ({children}) => {
 		}
 
 		if (!allSuccessful) {
+			// Clear any remaining queued operations — they rely on stale state
+			operationQueue.current.length = 0;
 			await handleImageUpdate();
 		}
 

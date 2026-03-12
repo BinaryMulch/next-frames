@@ -25,6 +25,7 @@ async function toggleImagePause(imageId, currentPauseState) {
 	}
 
 	revalidatePath("/slideshow");
+	revalidatePath("/dashboard");
 	return true;
 }
 
