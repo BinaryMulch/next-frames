@@ -15,6 +15,7 @@ const nextConfig = {
 			}
 		]
 	},
+	serverExternalPackages: ['pocketbase'],
 	experimental: {
 		serverActions: {
 			bodySizeLimit: "50mb"

@@ -18,9 +18,15 @@ export const ImagesProvider = ({children}) => {
 	const operationQueue = useRef([]);
 	const isProcessingQueue = useRef(false);
 	const heartbeatInterval = useRef(null);
+	const currentUserRef = useRef(null);
 	const HEARTBEAT_INTERVAL = 5000; // 5 seconds
 	const ACTIVE_USER_TIMEOUT = 15000; // 15 seconds
-	
+
+	// Keep ref in sync with state
+	useEffect(() => {
+		currentUserRef.current = currentUser;
+	}, [currentUser]);
+
 	const handleImageUpdate = useCallback(async () => {
 		try {
 			const data = await getAllImages();
@@ -35,25 +41,78 @@ export const ImagesProvider = ({children}) => {
 		setImagePreviewUrl(url);
 	}, []);
 
+	// Plain internal functions declared in dependency order (no useCallback needed)
+
+	function checkForActiveUser() {
+		const stored = localStorage.getItem('activeUser');
+		if (!stored) {
+			setActiveUser(null);
+			setIsBlocked(false);
+			return;
+		}
+
+		const { userId, timestamp } = JSON.parse(stored);
+		const now = Date.now();
+
+		if (now - timestamp > ACTIVE_USER_TIMEOUT) {
+			localStorage.removeItem('activeUser');
+			setActiveUser(null);
+			setIsBlocked(false);
+			return;
+		}
+
+		setActiveUser(userId);
+		setIsBlocked(currentUserRef.current && userId !== currentUserRef.current);
+	}
+
+	function updateActiveUser(userId) {
+		const now = Date.now();
+		const activeUserData = {
+			userId,
+			timestamp: now
+		};
+		localStorage.setItem('activeUser', JSON.stringify(activeUserData));
+		checkForActiveUser();
+	}
+
+	function startHeartbeat(userId) {
+		if (heartbeatInterval.current) {
+			clearInterval(heartbeatInterval.current);
+		}
+
+		heartbeatInterval.current = setInterval(() => {
+			updateActiveUser(userId);
+		}, HEARTBEAT_INTERVAL);
+
+		updateActiveUser(userId);
+	}
+
+	function claimActiveStatus() {
+		if (currentUserRef.current) {
+			updateActiveUser(currentUserRef.current);
+			startHeartbeat(currentUserRef.current);
+		}
+	}
+
 	// Initialize current user and set up heartbeat
 	useEffect(() => {
 		let mounted = true;
 		let checkInterval;
-		
+
 		const initializeUser = async () => {
 			const pb = createClient();
 			const userId = pb.authStore.record?.id;
 			if (userId && mounted) {
 				setCurrentUser(userId);
+				currentUserRef.current = userId;
 				startHeartbeat(userId);
-				
-				// Periodically check for active user changes (reduced frequency)
+
 				checkInterval = setInterval(checkForActiveUser, 10000);
 			}
 		};
-		
+
 		initializeUser();
-		
+
 		return () => {
 			mounted = false;
 			if (heartbeatInterval.current) {
@@ -65,65 +124,7 @@ export const ImagesProvider = ({children}) => {
 		};
 	}, []);
 
-	const startHeartbeat = (userId) => {
-		// Clear existing heartbeat
-		if (heartbeatInterval.current) {
-			clearInterval(heartbeatInterval.current);
-		}
-
-		// Set up heartbeat to maintain active status
-		heartbeatInterval.current = setInterval(() => {
-			updateActiveUser(userId);
-		}, HEARTBEAT_INTERVAL);
-
-		// Initial heartbeat
-		updateActiveUser(userId);
-	};
-
-	const updateActiveUser = useCallback((userId) => {
-		const now = Date.now();
-		const activeUserData = {
-			userId,
-			timestamp: now
-		};
-		localStorage.setItem('activeUser', JSON.stringify(activeUserData));
-		checkForActiveUser();
-	}, []);
-
-	const checkForActiveUser = useCallback(() => {
-		const stored = localStorage.getItem('activeUser');
-		if (!stored) {
-			setActiveUser(null);
-			setIsBlocked(false);
-			return;
-		}
-
-		const { userId, timestamp } = JSON.parse(stored);
-		const now = Date.now();
-		
-		// If the stored user's heartbeat is too old, consider them inactive
-		if (now - timestamp > ACTIVE_USER_TIMEOUT) {
-			localStorage.removeItem('activeUser');
-			setActiveUser(null);
-			setIsBlocked(false);
-			return;
-		}
-
-		// Set active user
-		setActiveUser(userId);
-		
-		// Only block if it's a DIFFERENT user who is active
-		setIsBlocked(currentUser && userId !== currentUser);
-	}, [currentUser]);
-
-	const claimActiveStatus = useCallback(() => {
-		if (currentUser) {
-			updateActiveUser(currentUser);
-			startHeartbeat(currentUser);
-		}
-	}, [currentUser, updateActiveUser]);
-
-	const processOperationQueue = async () => {
+	const processOperationQueue = useCallback(async () => {
 		if (isProcessingQueue.current || operationQueue.current.length === 0) {
 			return;
 		}
@@ -135,7 +136,7 @@ export const ImagesProvider = ({children}) => {
 
 		while (operationQueue.current.length > 0) {
 			const operation = operationQueue.current.shift();
-			
+
 			try {
 				const success = await operation.action();
 				if (!success) {
@@ -150,116 +151,99 @@ export const ImagesProvider = ({children}) => {
 			}
 		}
 
-		// Only refresh if operations failed (optimistic updates should be correct for successful operations)
 		if (!allSuccessful) {
 			await handleImageUpdate();
 		}
 
-		// Small delay to show operation completion before removing loading state
 		await new Promise(resolve => setTimeout(resolve, 100));
 
 		isProcessingQueue.current = false;
 		setIsReordering(false);
-	};
+	}, [handleImageUpdate]);
 
-	const queueMoveOperation = (imageToMove, direction, serverAction) => {
-		// Check if operations are blocked
+	const queueMoveOperation = useCallback((imageToMove, direction, serverAction) => {
 		checkForActiveUser();
 		if (isBlocked) {
 			throw new Error('Another user is currently managing images. Please wait.');
 		}
 
-		// Claim active status for this user
 		claimActiveStatus();
 
-		// Apply optimistic update immediately with proper order_position sync
 		setImages(prevImages => {
 			const imagesCopy = [...prevImages];
 			const currentIndex = imagesCopy.findIndex(img => img.id === imageToMove.id);
-			
+
 			if (direction === 'up' && currentIndex > 0) {
-				// Swap positions in array for immediate visual feedback
-				[imagesCopy[currentIndex - 1], imagesCopy[currentIndex]] = 
+				[imagesCopy[currentIndex - 1], imagesCopy[currentIndex]] =
 				[imagesCopy[currentIndex], imagesCopy[currentIndex - 1]];
-				
-				// Update order_position to match array positions (1-based)
+
 				imagesCopy.forEach((img, index) => {
 					img.order_position = index + 1;
 				});
 			} else if (direction === 'down' && currentIndex < imagesCopy.length - 1) {
-				// Swap positions in array for immediate visual feedback
-				[imagesCopy[currentIndex], imagesCopy[currentIndex + 1]] = 
+				[imagesCopy[currentIndex], imagesCopy[currentIndex + 1]] =
 				[imagesCopy[currentIndex + 1], imagesCopy[currentIndex]];
-				
-				// Update order_position to match array positions (1-based)
+
 				imagesCopy.forEach((img, index) => {
 					img.order_position = index + 1;
 				});
 			}
-			
+
 			return imagesCopy;
 		});
 
-		// Queue the server action
 		operationQueue.current.push({
 			action: () => serverAction(imageToMove),
 			imageId: imageToMove.id,
 			direction
 		});
 
-		// Process the queue
 		processOperationQueue();
-	};
+	}, [isBlocked, processOperationQueue]);
 
 	const toggleImagePauseOptimistic = useCallback((imageId, serverAction) => {
-		// Check if operations are blocked
 		checkForActiveUser();
 		if (isBlocked) {
 			throw new Error('Another user is currently managing images. Please wait.');
 		}
 
-		// Claim active status for this user
 		claimActiveStatus();
 
-		// Apply optimistic update immediately
 		setImages(prevImages => {
-			return prevImages.map(img => 
-				img.id === imageId 
+			return prevImages.map(img =>
+				img.id === imageId
 					? { ...img, is_paused: !img.is_paused }
 					: img
 			);
 		});
 
-		// Execute server action asynchronously
 		serverAction().then(success => {
 			if (!success) {
-				// Revert optimistic update if server action failed
 				setImages(prevImages => {
-					return prevImages.map(img => 
-						img.id === imageId 
+					return prevImages.map(img =>
+						img.id === imageId
 							? { ...img, is_paused: !img.is_paused }
 							: img
 					);
 				});
 			}
 		}).catch(() => {
-			// Revert optimistic update on error
 			setImages(prevImages => {
-				return prevImages.map(img => 
-					img.id === imageId 
+				return prevImages.map(img =>
+					img.id === imageId
 						? { ...img, is_paused: !img.is_paused }
 						: img
 				);
 			});
 		});
-	}, [isBlocked, claimActiveStatus, checkForActiveUser]);
+	}, [isBlocked]);
 
 	const contextValue = useMemo(() => ({
-		images, 
-		handleImageUpdate, 
-		imagePreviewUrl, 
-		handleImagePreview, 
-		isReordering, 
+		images,
+		handleImageUpdate,
+		imagePreviewUrl,
+		handleImagePreview,
+		isReordering,
 		setIsReordering,
 		queueMoveOperation,
 		toggleImagePauseOptimistic,
@@ -267,7 +251,7 @@ export const ImagesProvider = ({children}) => {
 		activeUser,
 		currentUser,
 		claimActiveStatus
-	}), [images, handleImageUpdate, imagePreviewUrl, handleImagePreview, isReordering, isBlocked, activeUser, currentUser, claimActiveStatus, toggleImagePauseOptimistic]);
+	}), [images, handleImageUpdate, imagePreviewUrl, handleImagePreview, isReordering, queueMoveOperation, isBlocked, activeUser, currentUser, toggleImagePauseOptimistic]);
 
 	return (
 

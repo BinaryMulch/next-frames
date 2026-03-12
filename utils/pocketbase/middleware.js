@@ -2,6 +2,11 @@ import PocketBase from "pocketbase";
 import { NextResponse } from "next/server";
 
 export async function updateSession(request) {
+	// Skip auth refresh for server action requests to prevent revalidation loops
+	if (request.headers.get("Next-Action")) {
+		return NextResponse.next({ request });
+	}
+
 	const response = NextResponse.next({ request });
 
 	const authCookie = request.cookies.get("pb_auth");
