@@ -26,7 +26,7 @@ const MoveUpButton = ({image}) => {
 			className={`p-2 rounded-lg transition-all duration-150 active:scale-90 active:-translate-y-0.5 ${
 				isBlocked
 					? 'text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed'
-					: 'text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
+					: 'text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30'
 			}`}
 			title={isBlocked ? "Another user is managing images" : "Move image up"}
 		>
