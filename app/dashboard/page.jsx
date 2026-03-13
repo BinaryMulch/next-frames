@@ -22,9 +22,9 @@ const DashboardPage = async () => {
 			<section className="h-[calc(100vh-65px)] bg-surface-0 overflow-hidden transition-colors duration-200">
 				<div className="h-full flex flex-col px-6 py-6 animate-fade-in">
 					<ActiveUserBanner />
-					<div className="mb-6 flex-shrink-0">
-						<h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white mb-2">Dashboard</h1>
-						<p className="text-gray-600 dark:text-gray-400 text-lg">Manage your slideshow images and preview them in real-time</p>
+					<div className="mb-4 flex-shrink-0 flex items-baseline gap-3 pl-2">
+						<h1 className="text-2xl font-black tracking-tight text-gray-900 dark:text-white">Dashboard</h1>
+						<p className="text-gray-500 dark:text-gray-400 text-sm">Manage your slideshow images and preview them in real-time</p>
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1 min-h-0">

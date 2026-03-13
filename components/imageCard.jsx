@@ -88,9 +88,9 @@ const ImageCard = memo(({image}) => {
 					</p>
 				</div>
 				<div className="flex items-center rounded-lg p-1 shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-150 bg-gray-100 dark:bg-gray-700/50">
-					<RenameButton onStartEditing={() => { setEditName(baseName); setIsEditing(true); }} />
-					<div className="mx-1 w-px h-6 bg-gray-300 dark:bg-gray-500/50"></div>
 					<PreviewButton url={image.url} />
+					<div className="mx-1 w-px h-6 bg-gray-300 dark:bg-gray-500/50"></div>
+					<RenameButton onStartEditing={() => { setEditName(baseName); setIsEditing(true); }} />
 					<div className="mx-1 w-px h-6 bg-gray-300 dark:bg-gray-500/50"></div>
 					<PauseButton image={image} />
 					<div className="mx-1 w-px h-6 bg-gray-300 dark:bg-gray-500/50"></div>
