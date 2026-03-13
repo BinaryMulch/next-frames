@@ -199,6 +199,48 @@ export const ImagesProvider = ({children}) => {
 		processOperationQueue();
 	}, [isBlocked, processOperationQueue]);
 
+	const renameImageOptimistic = useCallback((imageId, newName, serverAction) => {
+		checkForActiveUser();
+		if (isBlocked) {
+			throw new Error('Another user is currently managing images. Please wait.');
+		}
+
+		claimActiveStatus();
+
+		let oldName;
+		setImages(prevImages => {
+			return prevImages.map(img => {
+				if (img.id === imageId) {
+					oldName = img.name;
+					return { ...img, name: newName };
+				}
+				return img;
+			});
+		});
+
+		serverAction().then(success => {
+			if (!success) {
+				setImages(prevImages => {
+					return prevImages.map(img =>
+						img.id === imageId
+							? { ...img, name: oldName }
+							: img
+					);
+				});
+				toast.error("Failed to rename image. Change has been reverted.");
+			}
+		}).catch(() => {
+			setImages(prevImages => {
+				return prevImages.map(img =>
+					img.id === imageId
+						? { ...img, name: oldName }
+						: img
+				);
+			});
+			toast.error("Failed to rename image. Change has been reverted.");
+		});
+	}, [isBlocked]);
+
 	const toggleImagePauseOptimistic = useCallback((imageId, serverAction) => {
 		checkForActiveUser();
 		if (isBlocked) {
@@ -247,11 +289,12 @@ export const ImagesProvider = ({children}) => {
 		setIsReordering,
 		queueMoveOperation,
 		toggleImagePauseOptimistic,
+		renameImageOptimistic,
 		isBlocked,
 		activeUser,
 		currentUser,
 		claimActiveStatus
-	}), [images, handleImageUpdate, imagePreviewUrl, handleImagePreview, isReordering, queueMoveOperation, isBlocked, activeUser, currentUser, toggleImagePauseOptimistic]);
+	}), [images, handleImageUpdate, imagePreviewUrl, handleImagePreview, isReordering, queueMoveOperation, isBlocked, activeUser, currentUser, toggleImagePauseOptimistic, renameImageOptimistic]);
 
 	return (
 
