@@ -98,12 +98,12 @@ const ImageUpload = () => {
 
 	return (
 
-		<div className="p-4 border-b border-gray-200/50 dark:border-gray-700/30">
+		<div className="p-4 border-b border-gray-200 dark:border-gray-700/30">
 			<div onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} className="flex items-center justify-center w-full">
 				<label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-28 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-200 ${
 					isDragOver
 						? 'border-primary-500 bg-primary-50/50 dark:bg-primary-900/20 scale-[1.02]'
-						: 'border-gray-300/80 dark:border-gray-600/50 bg-white/50 dark:bg-gray-800/50 hover:bg-primary-50/30 dark:hover:bg-primary-900/10 hover:border-primary-400/50'
+						: 'border-gray-300 dark:border-gray-600/50 bg-gray-50 dark:bg-gray-800/50 hover:bg-primary-50 dark:hover:bg-primary-900/10 hover:border-primary-400'
 				}`}>
 					<div className="flex flex-col items-center justify-center py-3">
 

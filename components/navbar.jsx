@@ -19,12 +19,12 @@ export default function Navbar() {
 
 	return (
 
-		<Disclosure as="nav" className="bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-b border-white/20 dark:border-gray-800/50 shadow-sm transition-colors duration-200">
+		<Disclosure as="nav" className="bg-white/90 dark:bg-gray-950/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800/50 shadow-sm transition-colors duration-200">
 			<div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 				<div className="relative flex h-16 items-center justify-between">
 					<div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
 						{/* Mobile menu button*/}
-						<DisclosureButton className="group relative inline-flex items-center justify-center rounded-xl p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/80 hover:text-gray-700 dark:hover:text-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none focus:ring-inset transition-all duration-150">
+						<DisclosureButton className="group relative inline-flex items-center justify-center rounded-xl p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100/80 dark:hover:bg-gray-800/80 hover:text-gray-700 dark:hover:text-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none focus:ring-inset transition-all duration-150">
 							<span className="absolute -inset-0.5" />
 							<span className="sr-only">Open main menu</span>
 							<Bars3Icon aria-hidden="true" className="block size-6 group-data-open:hidden" />
@@ -65,7 +65,7 @@ export default function Navbar() {
 				</div>
 			</div>
 
-			<DisclosurePanel className="sm:hidden border-t border-white/20 dark:border-gray-800/50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl transition-colors duration-200">
+			<DisclosurePanel className="sm:hidden border-t border-gray-200 dark:border-gray-800/50 bg-white/90 dark:bg-gray-950/80 backdrop-blur-xl transition-colors duration-200">
 				<div className="space-y-1 px-2 pt-2 pb-3">
 					<DisclosureButton
 						as="a"

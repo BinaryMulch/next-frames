@@ -16,7 +16,7 @@ const ThemeToggle = () => {
 	return (
 		<button
 			onClick={toggleTheme}
-			className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 flex items-center justify-center transition-all duration-200 border border-gray-200/50 dark:border-gray-700/50"
+			className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 flex items-center justify-center transition-all duration-200 border border-gray-200 dark:border-gray-700/50"
 			title={isDark ? "Switch to light mode" : "Switch to dark mode"}
 		>
 			<span className={`inline-block transition-transform duration-300 ${isDark ? 'rotate-0' : 'rotate-180'}`}>

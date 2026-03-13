@@ -52,10 +52,10 @@ const ImageCard = memo(({image}) => {
 
 	return (
 
-			<div className={`group flex items-center justify-between p-4 rounded-xl hover:-translate-y-0.5 hover:shadow-md transition-[transform,box-shadow] duration-200 border border-gray-200/50 dark:border-gray-700/30 ${
+			<div className={`group flex items-center justify-between p-4 rounded-xl hover:-translate-y-0.5 hover:shadow-md transition-[transform,box-shadow] duration-200 border border-gray-200 dark:border-gray-700/30 ${
 			image.is_paused
-				? 'pl-[calc(1rem-3px)] border-l-4 border-l-orange-400 bg-gray-50/80 dark:bg-gray-800/50'
-				: 'bg-white/80 dark:bg-gray-800/60 hover:border-primary-200 dark:hover:border-primary-500/30'
+				? 'pl-[calc(1rem-3px)] border-l-4 border-l-orange-400 bg-gray-50 dark:bg-gray-800/50'
+				: 'bg-white dark:bg-gray-800/60 hover:border-primary-300 dark:hover:border-primary-500/30'
 		}`}>
 				<div className="flex-grow min-w-0 mr-4">
 					{isEditing ? (
@@ -87,18 +87,18 @@ const ImageCard = memo(({image}) => {
 						)}
 					</p>
 				</div>
-				<div className="flex items-center rounded-lg p-1 shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-150 bg-gray-50/80 dark:bg-gray-700/50">
+				<div className="flex items-center rounded-lg p-1 shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-150 bg-gray-100 dark:bg-gray-700/50">
 					<RenameButton onStartEditing={() => { setEditName(baseName); setIsEditing(true); }} />
-					<div className="mx-1 w-px h-6 bg-gray-300/50 dark:bg-gray-500/50"></div>
+					<div className="mx-1 w-px h-6 bg-gray-300 dark:bg-gray-500/50"></div>
 					<PreviewButton url={image.url} />
-					<div className="mx-1 w-px h-6 bg-gray-300/50 dark:bg-gray-500/50"></div>
+					<div className="mx-1 w-px h-6 bg-gray-300 dark:bg-gray-500/50"></div>
 					<PauseButton image={image} />
-					<div className="mx-1 w-px h-6 bg-gray-300/50 dark:bg-gray-500/50"></div>
+					<div className="mx-1 w-px h-6 bg-gray-300 dark:bg-gray-500/50"></div>
 					<div className="flex">
 						<MoveUpButton image={image} />
 						<MoveDownButton image={image} />
 					</div>
-					<div className="mx-1 w-px h-6 bg-gray-300/50 dark:bg-gray-500/50"></div>
+					<div className="mx-1 w-px h-6 bg-gray-300 dark:bg-gray-500/50"></div>
 					<DeleteButton id={image.id} />
 				</div>
 

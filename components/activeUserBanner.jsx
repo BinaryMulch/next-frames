@@ -8,7 +8,7 @@ const ActiveUserBanner = () => {
 	if (!isBlocked) return null;
 
 	return (
-		<div className="mb-6 p-4 bg-amber-50/80 dark:bg-amber-950/30 backdrop-blur border border-amber-200/50 dark:border-amber-800/30 rounded-2xl flex-shrink-0 shadow-sm">
+		<div className="mb-6 p-4 bg-amber-50/80 dark:bg-amber-950/30 backdrop-blur border border-amber-200 dark:border-amber-800/30 rounded-2xl flex-shrink-0 shadow-sm">
 			<div className="flex items-center justify-between">
 				<div className="flex items-center">
 					<div className="relative w-3 h-3 mr-3">

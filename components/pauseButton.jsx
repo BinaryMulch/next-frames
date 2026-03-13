@@ -34,8 +34,8 @@ const PauseButton = ({image}) => {
 				isBlocked
 					? 'text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed'
 					: isPaused
-						? 'text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30'
-						: 'text-gray-500 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/30'
+						? 'text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30'
+						: 'text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/30'
 			}`}
 			title={isBlocked ? "Another user is managing images" : buttonTitle}
 		>

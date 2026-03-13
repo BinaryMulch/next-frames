@@ -29,7 +29,7 @@ export default function LoginPage() {
 
 		<div className="bg-gradient-to-br from-gray-50 via-primary-50/30 to-gray-100 dark:from-gray-950 dark:via-primary-950/20 dark:to-gray-900 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 transition-colors duration-200">
 				<div className="sm:mx-auto sm:w-full sm:max-w-md animate-fade-in">
-					<div className="relative bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl p-8 shadow-2xl shadow-primary-500/5 rounded-2xl border border-white/20 dark:border-gray-700/30 transition-colors duration-200">
+					<div className="relative bg-white/90 dark:bg-gray-900/70 backdrop-blur-xl p-8 shadow-2xl shadow-primary-500/5 rounded-2xl border border-gray-200 dark:border-gray-700/30 transition-colors duration-200">
 						<div className="absolute top-4 right-4">
 							<ThemeToggle />
 						</div>
@@ -57,7 +57,7 @@ export default function LoginPage() {
 									type="email"
 									required
 									autoComplete="email"
-									className="block w-full rounded-xl border border-gray-200/80 dark:border-gray-600/50 bg-white/80 dark:bg-gray-800/80 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-150"
+									className="block w-full rounded-xl border border-gray-300 dark:border-gray-600/50 bg-white/80 dark:bg-gray-800/80 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-150"
 									placeholder="Enter your email"
 								/>
 							</div>
@@ -72,7 +72,7 @@ export default function LoginPage() {
 									type="password"
 									required
 									autoComplete="current-password"
-									className="block w-full rounded-xl border border-gray-200/80 dark:border-gray-600/50 bg-white/80 dark:bg-gray-800/80 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-150"
+									className="block w-full rounded-xl border border-gray-300 dark:border-gray-600/50 bg-white/80 dark:bg-gray-800/80 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-150"
 									placeholder="Enter your password"
 								/>
 							</div>

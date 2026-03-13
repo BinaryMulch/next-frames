@@ -7,7 +7,7 @@ import {ImagesContext} from "@/app/context/imagesContext";
 import ImageCard from "@/components/imageCard";
 
 const SkeletonCard = () => (
-	<div className="flex items-center justify-between p-4 rounded-xl border border-gray-200/50 dark:border-gray-700/30 bg-white/50 dark:bg-gray-800/50">
+	<div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 dark:border-gray-700/30 bg-white dark:bg-gray-800/50">
 		<div className="flex-grow min-w-0 mr-4">
 			<div className="skeleton h-4 w-32 mb-2"></div>
 			<div className="skeleton h-3 w-24"></div>
@@ -74,7 +74,7 @@ const ImageCardList = memo(() => {
 								</span>
 							</div>
 						</div>
-						<div className="flex-1 overflow-y-auto px-6 pb-6">
+						<div className="flex-1 overflow-y-auto px-6 pt-1 pb-6">
 							<div className="flex flex-col gap-3">
 								{
 									filteredImages.map(
@@ -95,7 +95,7 @@ const ImageCardList = memo(() => {
 								</svg>
 							</div>
 							<p className="text-gray-700 dark:text-gray-300 font-medium">No images yet</p>
-							<p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Upload your first image to get started</p>
+							<p className="text-gray-500 dark:text-gray-500 text-sm mt-1">Upload your first image to get started</p>
 						</div>
 					</div>
 				)

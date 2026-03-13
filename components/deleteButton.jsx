@@ -33,7 +33,7 @@ const DeleteButton = ({id}) => {
 			className={`p-2 rounded-lg transition-all duration-150 active:scale-90 ${
 				isReordering || isLoading
 					? 'text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed'
-					: 'text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30'
+					: 'text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30'
 			}`}
 			title="Delete image"
 		>

@@ -29,12 +29,12 @@ const DashboardPage = async () => {
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1 min-h-0">
 
-						<div className="md:col-span-1 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-lg shadow-black/5 border border-white/20 dark:border-gray-700/30 rounded-2xl overflow-hidden flex flex-col transition-colors duration-200">
+						<div className="md:col-span-1 bg-white dark:bg-gray-900/80 backdrop-blur-sm shadow-lg shadow-black/10 border border-gray-200 dark:border-gray-700/30 rounded-2xl overflow-hidden flex flex-col transition-colors duration-200">
 							<ImageUploadCard />
 							<ImageCardList />
 						</div>
 
-						<div className="relative md:col-span-1 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-lg shadow-black/5 border border-white/20 dark:border-gray-700/30 rounded-2xl overflow-hidden p-4 ring-1 ring-inset ring-gray-900/5 dark:ring-white/5 transition-colors duration-200">
+						<div className="relative md:col-span-1 bg-white dark:bg-gray-900/80 backdrop-blur-sm shadow-lg shadow-black/10 border border-gray-200 dark:border-gray-700/30 rounded-2xl overflow-hidden p-4 ring-1 ring-inset ring-gray-900/10 dark:ring-white/5 transition-colors duration-200">
 							<ImagePreview />
 						</div>
 

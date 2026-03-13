@@ -15,7 +15,7 @@ const RenameButton = ({onStartEditing}) => {
 			className={`p-2 rounded-lg transition-all duration-150 active:scale-90 ${
 				isBlocked
 					? 'text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed'
-					: 'text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30'
+					: 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30'
 			}`}
 			title={isBlocked ? "Another user is managing images" : "Rename"}
 		>
