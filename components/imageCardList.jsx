@@ -1,6 +1,7 @@
 "use client";
 
-import {useContext, useEffect, useState, memo} from "react";
+import {useContext, useEffect, useState, useMemo, memo} from "react";
+import {FaEye, FaEyeSlash} from "react-icons/fa";
 
 import {ImagesContext} from "@/app/context/imagesContext";
 import ImageCard from "@/components/imageCard";
@@ -23,6 +24,13 @@ const ImageCardList = memo(() => {
 	const {images, handleImageUpdate} = useContext(ImagesContext);
 
 	const [isLoading, setIsLoading] = useState(true);
+	const [showPaused, setShowPaused] = useState(true);
+
+	const hasPausedImages = useMemo(() => images.some(img => img.is_paused), [images]);
+	const filteredImages = useMemo(
+		() => showPaused ? images : images.filter(img => !img.is_paused),
+		[images, showPaused]
+	);
 
 	useEffect(
 		() => {
@@ -50,14 +58,26 @@ const ImageCardList = memo(() => {
 							<h3 className="text-lg font-semibold text-gray-900 dark:text-white">
 								Images
 							</h3>
-							<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400">
-								{images.length}
-							</span>
+							<div className="flex items-center gap-2">
+								{hasPausedImages && (
+									<button
+										onClick={() => setShowPaused(prev => !prev)}
+										className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium transition-colors bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 hover:bg-orange-200 dark:hover:bg-orange-900/50"
+										title={showPaused ? "Hide paused images" : "Show paused images"}
+									>
+										{showPaused ? <FaEyeSlash className="w-3 h-3" /> : <FaEye className="w-3 h-3" />}
+										{showPaused ? "Hide Paused" : "Show Paused"}
+									</button>
+								)}
+								<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400">
+									{filteredImages.length}
+								</span>
+							</div>
 						</div>
 						<div className="flex-1 overflow-y-auto px-6 pb-6">
 							<div className="flex flex-col gap-3">
 								{
-									images.map(
+									filteredImages.map(
 										(image) => (
 											<ImageCard key={image.id} image={image} />
 										)
