@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/pocketbase/server";
-import { revalidatePath } from "next/cache";
+
 import getAllImages from "./getAllImages";
 
 export default async function deleteImage(id) {
@@ -26,8 +26,6 @@ export default async function deleteImage(id) {
 	await compactOrderPositions(pb);
 
 	// successfully deleted image
-	revalidatePath("/slideshow");
-	revalidatePath("/dashboard");
 	return true;
 
 }

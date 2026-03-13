@@ -3,7 +3,6 @@
 import {useContext, useState} from "react";
 import {FaTrash} from "react-icons/fa";
 import {toast} from "react-toastify";
-import ClipLoader from "react-spinners/ClipLoader";
 
 import deleteImage from "@/app/actions/deleteImage";
 import {ImagesContext} from "@/app/context/imagesContext";
@@ -28,19 +27,19 @@ const DeleteButton = ({id}) => {
 
 	return (
 
-		<button 
-			onClick={handleDeleteClick} 
+		<button
+			onClick={handleDeleteClick}
 			disabled={isReordering || isLoading}
-			className={`p-2 rounded-lg transition-colors ${
-				isReordering || isLoading 
-					? 'text-gray-400 dark:text-gray-600 cursor-not-allowed' 
-					: 'text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/30'
+			className={`p-2 rounded-lg transition-all duration-150 active:scale-90 ${
+				isReordering || isLoading
+					? 'text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed'
+					: 'text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30'
 			}`}
 			title="Delete image"
 		>
 			{
 				isLoading
-				? <ClipLoader size={16} color="#9ca3af"/>
+				? <div className="w-4 h-4 rounded-full border-2 border-gray-400 border-t-transparent animate-spin"></div>
 				: <FaTrash />
 			}
 		</button>

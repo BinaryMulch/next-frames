@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/pocketbase/server";
-import { revalidatePath } from "next/cache";
+
 import getAllImages from "./getAllImages";
 
 async function moveDownImage(image) {
@@ -80,8 +80,6 @@ async function moveDownImage(image) {
 		return false;
 	}
 
-	revalidatePath("/slideshow");
-	revalidatePath("/dashboard");
 	return true;
 
 }

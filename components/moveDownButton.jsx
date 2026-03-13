@@ -1,6 +1,6 @@
 "use client";
 
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import {FaArrowDown} from "react-icons/fa";
 import {toast} from "react-toastify";
 
@@ -20,13 +20,13 @@ const MoveDownButton = ({image}) => {
 
 	return (
 
-		<button 
-			onClick={handleMoveClick} 
+		<button
+			onClick={handleMoveClick}
 			disabled={isBlocked}
-			className={`p-2 rounded-lg transition-colors ${
-				isBlocked 
-					? 'text-gray-400 dark:text-gray-600 cursor-not-allowed' 
-					: 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+			className={`p-2 rounded-lg transition-all duration-150 active:scale-90 active:translate-y-0.5 ${
+				isBlocked
+					? 'text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed'
+					: 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
 			}`}
 			title={isBlocked ? "Another user is managing images" : "Move image down"}
 		>

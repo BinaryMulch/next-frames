@@ -3,7 +3,6 @@
 import {useContext, useState} from "react";
 import {FaCloudUploadAlt} from "react-icons/fa";
 import {toast} from "react-toastify";
-import ClipLoader from "react-spinners/ClipLoader";
 
 import {uploadImage} from "@/app/actions/uploadImage";
 import {ImagesContext} from "@/app/context/imagesContext";
@@ -12,13 +11,20 @@ const ImageUpload = () => {
 	const {handleImageUpdate} = useContext(ImagesContext);
 
 	const [isLoading, setIsLoading] = useState(false);
+	const [isDragOver, setIsDragOver] = useState(false);
 
 	const handleDragOver = (event) => {
 		event.preventDefault();
+		setIsDragOver(true);
+	}
+
+	const handleDragLeave = () => {
+		setIsDragOver(false);
 	}
 
 	const handleDrop = async (event) => {
 		event.preventDefault();
+		setIsDragOver(false);
 
 		const files = event.dataTransfer.files;
 
@@ -76,7 +82,7 @@ const ImageUpload = () => {
 				return false;
 			}
 		}
-		
+
 		setIsLoading(true);
 		const result = await uploadImage(files);
 		handleImageUpdate();
@@ -92,24 +98,28 @@ const ImageUpload = () => {
 
 	return (
 
-		<div className="p-4 border-b border-gray-200 dark:border-gray-700">
-			<div onDragOver={handleDragOver} onDrop={handleDrop} className="flex items-center justify-center w-full">
-				<label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-white dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-gray-600 hover:border-blue-400 transition-colors duration-200">
+		<div className="p-4 border-b border-gray-200/50 dark:border-gray-700/30">
+			<div onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} className="flex items-center justify-center w-full">
+				<label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-28 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-200 ${
+					isDragOver
+						? 'border-primary-500 bg-primary-50/50 dark:bg-primary-900/20 scale-[1.02]'
+						: 'border-gray-300/80 dark:border-gray-600/50 bg-white/50 dark:bg-gray-800/50 hover:bg-primary-50/30 dark:hover:bg-primary-900/10 hover:border-primary-400/50'
+				}`}>
 					<div className="flex flex-col items-center justify-center py-3">
 
 						{
 							isLoading
 							? (
-								<div className="flex items-center">
-									<ClipLoader size={16} color="#3b82f6"/>
-									<p className="text-xs text-gray-600 dark:text-gray-400 ml-2 font-medium">Uploading...</p>
+								<div className="flex items-center gap-3">
+									<div className="w-5 h-5 rounded-full border-2 border-primary-500 border-t-transparent animate-spin"></div>
+									<p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Uploading...</p>
 								</div>
 							)
 							: (
 								<>
 									<div className="flex items-center">
-										<FaCloudUploadAlt className="text-blue-500 mr-2" />
-										<span className="text-sm text-gray-700 dark:text-gray-300"><span className="font-semibold text-blue-600 dark:text-blue-400">Click to upload</span> or drag files</span>
+										<FaCloudUploadAlt className="text-primary-500 mr-2 text-lg" />
+										<span className="text-sm text-gray-700 dark:text-gray-300"><span className="font-semibold text-primary-600 dark:text-primary-400">Click to upload</span> or drag files</span>
 									</div>
 									<p className="text-xs text-gray-500 dark:text-gray-400 mt-1">SVG, PNG, JPG, GIF (MAX. 5MB)</p>
 								</>

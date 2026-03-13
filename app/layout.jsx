@@ -15,14 +15,17 @@ const RootLayout = ({children}) => {
 	return (
 
 		<html className="h-full">
-			<body className="h-full">
+			<body className="h-full bg-surface-0 antialiased">
 				<ThemeProvider>
 					<main className="h-full">{children}</main>
-					<ToastContainer />
+					<ToastContainer
+						position="bottom-right"
+						toastClassName="!rounded-2xl"
+					/>
 				</ThemeProvider>
 			</body>
 		</html>
-		
+
 
 	);
 };

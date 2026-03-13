@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/pocketbase/server";
-import { revalidatePath } from "next/cache";
+
 
 async function toggleImagePause(imageId, currentPauseState) {
 	const pb = await createClient();
@@ -24,8 +24,6 @@ async function toggleImagePause(imageId, currentPauseState) {
 		return false;
 	}
 
-	revalidatePath("/slideshow");
-	revalidatePath("/dashboard");
 	return true;
 }
 

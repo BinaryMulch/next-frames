@@ -14,7 +14,7 @@ const PauseButton = ({image}) => {
 		if (isBlocked) return;
 
 		const action = image.is_paused ? "resumed" : "paused";
-		
+
 		try {
 			toggleImagePauseOptimistic(image.id, () => toggleImagePause(image.id, image.is_paused));
 			toast.success(`Image ${action} successfully!`);
@@ -27,15 +27,15 @@ const PauseButton = ({image}) => {
 	const buttonTitle = isPaused ? "Resume in slideshow" : "Pause from slideshow";
 
 	return (
-		<button 
-			onClick={handlePauseToggle} 
+		<button
+			onClick={handlePauseToggle}
 			disabled={isBlocked}
-			className={`p-2 rounded-lg transition-colors ${
+			className={`p-2 rounded-lg transition-all duration-150 active:scale-90 ${
 				isBlocked
-					? 'text-gray-400 dark:text-gray-600 cursor-not-allowed' 
+					? 'text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed'
 					: isPaused
-						? 'text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/30'
-						: 'text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/30'
+						? 'text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30'
+						: 'text-gray-500 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/30'
 			}`}
 			title={isBlocked ? "Another user is managing images" : buttonTitle}
 		>

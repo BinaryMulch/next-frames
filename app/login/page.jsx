@@ -27,21 +27,21 @@ export default function LoginPage() {
 
 	return (
 
-		<div className="bg-gray-50 dark:bg-gray-900 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 transition-colors duration-200">
-				<div className="sm:mx-auto sm:w-full sm:max-w-md">
-					<div className="relative bg-white dark:bg-gray-800 p-8 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+		<div className="bg-gradient-to-br from-gray-50 via-primary-50/30 to-gray-100 dark:from-gray-950 dark:via-primary-950/20 dark:to-gray-900 flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 transition-colors duration-200">
+				<div className="sm:mx-auto sm:w-full sm:max-w-md animate-fade-in">
+					<div className="relative bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl p-8 shadow-2xl shadow-primary-500/5 rounded-2xl border border-white/20 dark:border-gray-700/30 transition-colors duration-200">
 						<div className="absolute top-4 right-4">
 							<ThemeToggle />
 						</div>
 						<div className="text-center mb-8">
-							<h1 className="text-3xl font-bold text-gray-900 dark:text-white">Next Frames</h1>
+							<h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">Next Frames</h1>
 							<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Sign in to your account</p>
 						</div>
 
 						{error &&
 							(
-								<div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-									<p className="text-sm text-red-600 dark:text-red-400 text-center">{error}</p>
+								<div className="mb-6 p-4 bg-red-50/50 dark:bg-red-900/20 border-l-4 border-red-500 rounded-lg">
+									<p className="text-sm text-red-600 dark:text-red-400">{error}</p>
 								</div>
 							)
 						}
@@ -57,7 +57,7 @@ export default function LoginPage() {
 									type="email"
 									required
 									autoComplete="email"
-									className="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 focus:outline-none transition-colors"
+									className="block w-full rounded-xl border border-gray-200/80 dark:border-gray-600/50 bg-white/80 dark:bg-gray-800/80 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-150"
 									placeholder="Enter your email"
 								/>
 							</div>
@@ -72,7 +72,7 @@ export default function LoginPage() {
 									type="password"
 									required
 									autoComplete="current-password"
-									className="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 focus:outline-none transition-colors"
+									className="block w-full rounded-xl border border-gray-200/80 dark:border-gray-600/50 bg-white/80 dark:bg-gray-800/80 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-150"
 									placeholder="Enter your password"
 								/>
 							</div>
@@ -82,7 +82,7 @@ export default function LoginPage() {
 									? (
 										<button
 											disabled
-											className="w-full flex justify-center items-center rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm cursor-not-allowed opacity-75"
+											className="w-full flex justify-center items-center rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-500/25 cursor-not-allowed opacity-75"
 										>
 											<svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
 												<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -94,7 +94,7 @@ export default function LoginPage() {
 									: (
 										<button
 											type="submit"
-											className="w-full flex justify-center rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+											className="w-full flex justify-center rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-150"
 										>
 											Sign in
 										</button>
